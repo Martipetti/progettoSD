@@ -18,19 +18,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import progettoBanca.NotFoundException;
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
 
 @RestController
 public class ControllerSistema {
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/api/account")
+	@RequestMapping(method = RequestMethod.GET, value = "/api/account/")
 	public List<Account> getAccount() throws IOException, URISyntaxException {
 		return ProgettoBancaApplication.account;
 //		return manageHtml("Index.html");
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/api/account")
+	@RequestMapping(method = RequestMethod.POST, value = "/api/account/")
 	public String makeAccount(@RequestBody String bodyString) {
 		Map<String, String> body = parseBody(bodyString);
 		Account a = new Account(body.get("name"), body.get("surname"));
@@ -41,7 +42,7 @@ public class ControllerSistema {
 			return "Failed";	
 	}
 	
-//	@RequestMapping(method = RequestMethod.DELETE, value = "/api/account")
+//	@RequestMapping(method = RequestMethod.DELETE, value = "/api/account/")
 //	public String deleteAccount(@RequestBody String bodyString) {
 //		Map<String, String> body = parseBody(bodyString);
 //		String id = body.get("id");
@@ -67,30 +68,50 @@ public class ControllerSistema {
 //		else {
 //			return "Failed";
 //		}
-		
+//		return id;
 //	}
 	
-	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account/{ID}")
+	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}/")
+	public Account getAccount(@PathVariable String ID) {
+		Account tmp = null;
+	    for(Account account : ProgettoBancaApplication.account) {
+			if(account.getId().equals(ID)) {
+				tmp = account;
+				break;
+			}
+		}
+	    
+	    if(tmp != null) {		
+			return tmp; //SISTEMARE
+	    }
+		else {
+			throw new NotFoundException();
+		}
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account/{ID}/")
 	public String removeAccount(@PathVariable String ID) {
-	    Account a=null;
-	    for(Account co : ProgettoBancaApplication.account) {
-			if(co.getId().equals(ID)) {
-				a = co;
+	    Account tmp = null;
+	    for(Account account : ProgettoBancaApplication.account) {
+			if(account.getId().equals(ID)) {
+				tmp = account;
 				break;
 			}
 		}
 		
-	    if(a!=null) {
-			if(ProgettoBancaApplication.account.remove(a))
+	    if(tmp != null) {
+			if(ProgettoBancaApplication.account.remove(tmp))
 				return "OK";
 			else
-				return "Failed";
+				throw new NotFoundException();
 		}
 		else
-			return "Failed";
+			throw new NotFoundException();
 	
 	}
 	
+	
+	//metodo per la costruzione della pagina html
 	public String manageHtml(String name) throws URISyntaxException, IOException {
 		URL res = getClass().getClassLoader().getResource(name);
 		File file = Paths.get(res.toURI()).toFile();
@@ -112,6 +133,7 @@ public class ControllerSistema {
 	    }
 	}
 	
+	//metodo per il parsing del body delle richieste
 	public Map<String, String> parseBody(String str) {
 		Map<String, String> body = new HashMap<>();
 		  String[] values = str.split("&");
