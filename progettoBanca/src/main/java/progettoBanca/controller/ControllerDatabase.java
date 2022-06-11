@@ -10,32 +10,45 @@ import progettoBanca.ProgettoBancaApplication;
 public class ControllerDatabase {
 	
 	public Connection c = null;
+	public Statement stmt = null;
 
-//	ProgettoBancaApplication.c = null;
-	public void createDatabase(){
+	public void createDatabase() throws ClassNotFoundException{
 		
 		try {
-         Class.forName("org.sqlite.JDBC");
-         c = DriverManager.getConnection("jdbc:sqlite:database.db");
-      } catch ( Exception e ) {
-         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-         System.exit(0);
-      }
-      System.out.println("Opened database successfully"); 
-      
-      String account = "CREATE TABLE IF NOT EXISTS test ( " +
-                       "ID TEXT PRIMARY KEY, " +
-                       "NAME TEXT NOT NULL, " + 
-                       "SURNAME TEXT NOT NULL)";
-      
-      try ( Statement stmt = c.createStatement(); ) {
-            int rv = stmt.executeUpdate(account );
-            System.out.println( "executeUpdate() returned " + rv );
-        } catch ( SQLException e ) {
-            e.printStackTrace();
-            System.exit( 0 );
-        }
-        System.out.println( "Created database successfully" );
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+		} catch ( Exception e ) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
+		}
+		
+		createAccount();
+		
+		System.out.println("Opened/created database successfully"); 
+	}
+
+	private void createAccount() throws ClassNotFoundException { 
+
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+			
+			String account = "CREATE TABLE IF NOT EXISTS account ( " +
+					"ID TEXT PRIMARY KEY, " +
+					"NAME TEXT NOT NULL, " + 
+					"SURNAME TEXT NOT NULL,"+
+					"BALANCE INT NOT NULL);";
+			
+			stmt = c.createStatement(); 
+			stmt.executeUpdate(account);
+//			System.out.println( "executeUpdate() returned " + rv );
+			stmt.close();
+         	c.close();
+    	} catch ( SQLException e ) {
+    		e.printStackTrace();
+    		System.exit( 0 );
+    	}
+        System.out.println( "Created account successfully" );
 	}
 	
 }

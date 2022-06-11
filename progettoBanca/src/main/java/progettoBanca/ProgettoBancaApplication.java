@@ -17,7 +17,7 @@ public class ProgettoBancaApplication {
 	public static List<Account> account;
 	public static ControllerDatabase database;
     public static List<Transazione> transazioni;
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException {
 		SpringApplication.run(ProgettoBancaApplication.class, args);
 		
 		database = new ControllerDatabase();
