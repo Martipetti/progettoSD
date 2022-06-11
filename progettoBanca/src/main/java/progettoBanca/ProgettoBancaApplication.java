@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import progettoBanca.classi.Account;
+import progettoBanca.classi.Transazione;
 import progettoBanca.controller.ControllerDatabase;
 
 @SpringBootApplication
@@ -15,7 +16,7 @@ public class ProgettoBancaApplication {
 	
 	public static List<Account> account;
 	public static ControllerDatabase database;
-
+    public static List<Transazione> transazioni;
 	public static void main(String[] args) {
 		SpringApplication.run(ProgettoBancaApplication.class, args);
 		
@@ -23,6 +24,7 @@ public class ProgettoBancaApplication {
 		database.createDatabase();
 		
 		account = new ArrayList<Account>();
+		transazioni = new ArrayList<Transazione>();
 		Account a1 = new Account("Martino", "Pettinari");
 		Account a2 = new Account("Daniela", "Merlo");
 		account.add(a1);

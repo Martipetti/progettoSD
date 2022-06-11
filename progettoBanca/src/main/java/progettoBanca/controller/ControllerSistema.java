@@ -33,9 +33,34 @@ public class ControllerSistema {
 	@RequestMapping(method = RequestMethod.POST, value = "/api/account")
 	public String makeAccount(@RequestBody String bodyString) {
 		Map<String, String> body = parseBody(bodyString);
-		Account a = new Account(body.get("Name"), body.get("Surname"));
+		Account a = new Account(body.get("name"), body.get("surname"));
 		ProgettoBancaApplication.account.add(a);
-		return a.getId();
+		if(ProgettoBancaApplication.account.contains(a))
+			return a.getId();
+		else
+			return "Failed";
+		
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account/{ID}")
+	public String removeAccount(@PathVariable String ID) {
+	    Account a=null;
+	    for(Account co : ProgettoBancaApplication.account) {
+			if(co.getId().equals(ID)) {
+				a = co;
+				break;
+			}
+		}
+		
+	    if(a!=null) {
+			if(ProgettoBancaApplication.account.remove(a))
+				return "OK!";
+			else
+				return "Failed!";
+		}
+		else
+			return "Failed";
+	
 	}
 	
 	public String manageHtml(String name) throws URISyntaxException, IOException {

@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+/.gitignore
+/.mvn/
+/mvnw
+/mvnw.cmd
+/pom.xml
+/sqlite-jdbc-3.36.0.3.jar
+/src/
+/test.db

@@ -1,16 +1,21 @@
 package progettoBanca.classi;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Account {
 	
 	private String name;
 	private String surname;
 	private String id;
+	private List<Transazione> transazioni;
 	
 	public Account(String name, String surname) {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.id = createId();
+		transazioni= new ArrayList<Transazione>();
 	}	
 
 	//funzione per generare codice alfanumerico di lunghezza 20
@@ -44,6 +49,48 @@ public class Account {
 	public String getId() {
 		return id;
 	}
+
+    public List<Transazione> getTransazioni() {
+		return transazioni;
+	}
+
+	public void setTransazioni(List<Transazione> transazioni) {
+		this.transazioni = transazioni;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Account other = (Account) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (surname == null) {
+			if (other.surname != null)
+				return false;
+		} else if (!surname.equals(other.surname))
+			return false;
+		if (transazioni == null) {
+			if (other.transazioni != null)
+				return false;
+		} else if (!transazioni.equals(other.transazioni))
+			return false;
+		return true;
+	}
+	
+	
 	
 	
 }
