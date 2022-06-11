@@ -38,9 +38,37 @@ public class ControllerSistema {
 		if(ProgettoBancaApplication.account.contains(a))
 			return a.getId();
 		else
-			return "Failed";
-		
+			return "Failed";	
 	}
+	
+//	@RequestMapping(method = RequestMethod.DELETE, value = "/api/account")
+//	public String deleteAccount(@RequestBody String bodyString) {
+//		Map<String, String> body = parseBody(bodyString);
+//		String id = body.get("id");
+//		
+//		Account tmp = null;
+//		for(Account element : ProgettoBancaApplication.account) {
+//			if(element.getId().equals(id)) {
+//				tmp = element;
+//				if(ProgettoBancaApplication.account.remove(tmp)) {
+//					return "OK";
+//				}
+//				break;
+//			}
+//		}
+//		if(tmp != null) {
+//			if(ProgettoBancaApplication.account.remove(tmp)) {
+//				return "OK";
+//			}
+//			else {
+//				return "Failed";
+//			}
+//		}
+//		else {
+//			return "Failed";
+//		}
+		
+//	}
 	
 	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account/{ID}")
 	public String removeAccount(@PathVariable String ID) {
@@ -54,9 +82,9 @@ public class ControllerSistema {
 		
 	    if(a!=null) {
 			if(ProgettoBancaApplication.account.remove(a))
-				return "OK!";
+				return "OK";
 			else
-				return "Failed!";
+				return "Failed";
 		}
 		else
 			return "Failed";
