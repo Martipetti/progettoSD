@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,16 +27,18 @@ import progettoBanca.classi.Account;
 public class ControllerSistema {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/api/account/")
-	public List<Account> getAccount() throws IOException, URISyntaxException {
-		return ProgettoBancaApplication.account;
+	public List<Account> getAccount() throws IOException, URISyntaxException, SQLException {
+		return ControllerDatabase.getAllAccount();
 //		return manageHtml("Index.html");
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/api/account/")
-	public String makeAccount(@RequestBody String bodyString) {
+	public String makeAccount(@RequestBody String bodyString) throws ClassNotFoundException, SQLException {
+		
 		Map<String, String> body = parseBody(bodyString);
 		Account a = new Account(body.get("name"), body.get("surname"));
 		ProgettoBancaApplication.account.add(a);
+		
 		if(ProgettoBancaApplication.account.contains(a))
 			return a.getId();
 		else

@@ -1,6 +1,7 @@
 package progettoBanca;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,18 +18,19 @@ public class ProgettoBancaApplication {
 	public static List<Account> account;
 	public static ControllerDatabase database;
     public static List<Transazione> transazioni;
-	public static void main(String[] args) throws ClassNotFoundException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		SpringApplication.run(ProgettoBancaApplication.class, args);
 		
 		database = new ControllerDatabase();
 		database.createDatabase();
 		
-		account = new ArrayList<Account>();
-		transazioni = new ArrayList<Transazione>();
+//		account = new ArrayList<Account>();
+//		transazioni = new ArrayList<Transazione>();
 		Account a1 = new Account("Martino", "Pettinari");
-		Account a2 = new Account("Daniela", "Merlo");
-		account.add(a1);
-		account.add(a2);
+//		Account a2 = new Account("Daniela", "Merlo");
+//		account.add(a1);
+//		account.add(a2);
+		
 	}
 
 }

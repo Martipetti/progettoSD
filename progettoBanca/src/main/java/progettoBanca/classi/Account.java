@@ -1,7 +1,10 @@
 package progettoBanca.classi;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import progettoBanca.ProgettoBancaApplication;
 
 public class Account {
 	
@@ -11,17 +14,27 @@ public class Account {
 	private double balance;
 	private List<Transazione> transazioni;
 	
-	public Account(String name, String surname) {
+	public Account(String name, String surname) throws ClassNotFoundException, SQLException {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.id = createId();
 		this.balance = 0;
-		transazioni= new ArrayList<Transazione>();
-	}	
+		transazioni = new ArrayList<Transazione>();
+		ProgettoBancaApplication.database.creatAccount(id, name, surname, balance);
+	}
+
+	public Account(String id, String name, String surname, double balance) {
+		super();
+		this.name = name;
+		this.surname = surname;
+		this.id = id;
+		this.balance = balance;
+		transazioni = null;
+	}
 
 	//funzione per generare codice alfanumerico di lunghezza 20
-	String createId() {
+	public String createId() {
 		String str = "0123456789" + "abcdefghijklmnopqrstuvxyz";
 		StringBuilder sb = new StringBuilder(20);
 
