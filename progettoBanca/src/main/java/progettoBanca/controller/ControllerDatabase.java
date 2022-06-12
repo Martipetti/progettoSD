@@ -6,8 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
+import java.util.UUID;
 
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
@@ -28,6 +29,7 @@ public class ControllerDatabase {
 		}
 		
 		createAccountTable();
+		createAccountTransition();
 		
 		System.out.println("Opened/created database successfully"); 
 	}
@@ -56,6 +58,31 @@ public class ControllerDatabase {
     		System.exit( 0 );
     	}
         System.out.println( "Created account successfully" );
+	}
+	
+	private void createAccountTransition() throws ClassNotFoundException { 
+
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+			
+			String transation = "CREATE TABLE IF NOT EXISTS transation ( " +
+					"IDE TEXT PRIMARY KEY  NOT NULL, " +
+					"DATA DATE NOT NULL," +
+					"ID TEXT NOT NULL, " +
+					"CF VARCHAR(16) NOT NULL," +
+					"FOREIGN KEY (ID, CF) REFERENCES account(ID, CF));" ;
+			
+			stmt = c.createStatement(); 
+			stmt.executeUpdate(transation);
+//			System.out.println( "executeUpdate() returned " + rv );
+			stmt.close();
+         	c.close();
+    	} catch ( SQLException e ) {
+    		e.printStackTrace();
+    		System.exit( 0 );
+    	}
+        System.out.println( "Created transation successfully" );
 	}
 	
 	public void creatAccount(String id, String name, String surname, String cf, double balance) throws ClassNotFoundException, SQLException {
@@ -94,6 +121,7 @@ public class ControllerDatabase {
 		}
 	}
 	
+
 	public List<Account> getAllAccount() throws SQLException{
 //		JSONArray allAccount = new JSONArray();
 //		JSONObject account = new JSONObject();
@@ -146,7 +174,7 @@ public class ControllerDatabase {
 	}
 	
 	public void deleteAccount ( String id ) {
-		String query = "DELETE FROM account WHERE ID = '" + id +"'";
+		String query = "DELETE FROM account WHERE ID = '" + id +"' ";
 		try {
 			
 			Class.forName("org.sqlite.JDBC");
@@ -165,7 +193,7 @@ public class ControllerDatabase {
 		      System.exit(0);
 		}
 		
-		System.out.println("Operation done successfully");
+		System.out.println( "Operation done successfully" );
 
 	}
 	

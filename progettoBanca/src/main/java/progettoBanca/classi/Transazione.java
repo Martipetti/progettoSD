@@ -1,14 +1,19 @@
 package progettoBanca.classi;
 
+import java.util.Date;
+import java.util.UUID;
+
 public class Transazione {
-	private String ide;
+	private UUID ide;
+	private Date data;
 	public Transazione() {
 		super();
-		this.ide= createIDE();
+		data = new Date(); 
+		this.ide= UUID.randomUUID();
 	}
 	
 	//identificativo transizione di lunghezza 5
-	String createIDE() {
+	/*String createIDE() {
 		String str = "0123456789" + "abcdefghijklmnopqrstuvxyz";
 		StringBuilder sb = new StringBuilder(5);
 
@@ -17,6 +22,15 @@ public class Transazione {
 			sb.append(str.charAt(index));
 		}
 		return sb.toString();
+	}*/
+
+	public UUID getIde() {
+		return ide;
 	}
+
+	public Date getData() {
+		return data;
+	}
+	
 
 }

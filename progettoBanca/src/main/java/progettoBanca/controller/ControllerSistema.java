@@ -101,7 +101,7 @@ public class ControllerSistema {
 		}
 		
 	    if(tmp != null) {*/
-	    ProgettoBancaApplication.database.deleteAccount(id);	
+	    ProgettoBancaApplication.database.deleteAccount( id );	
 		return "OK";
 			
 		/*}
