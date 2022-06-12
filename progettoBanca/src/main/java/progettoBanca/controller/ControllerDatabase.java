@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
@@ -61,7 +59,9 @@ public class ControllerDatabase {
 	}
 	
 	public void creatAccount(String id, String name, String surname, String cf, double balance) throws ClassNotFoundException, SQLException {
-		
+		String q = "SELECT CF FROM account";
+		String cf1= "";
+		boolean b = true;
 		try {
 			Class.forName("org.sqlite.JDBC");
 	        c = DriverManager.getConnection("jdbc:sqlite:database.db");
@@ -69,12 +69,21 @@ public class ControllerDatabase {
 	        System.out.println("Opened database successfully");
 	
 	        stmt = c.createStatement();
-	
-			String query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE ) VALUES ( '" 
-					+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "');";
-			
-			stmt.executeUpdate(query);
-			
+	        ResultSet rs = stmt.executeQuery(q);
+	        while (rs.next() && b) {
+			    cf1 = rs.getString( "CF" );
+			    if(! cf1.equals( cf ) )
+			    	b = true;
+			    else
+			    	b = false;
+	        }
+	        	
+	        		if( b == true ) {
+	        		String query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE ) VALUES ( '" 
+	        		+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "');";
+			 		stmt.executeUpdate(query);
+	        						}
+	        
 			stmt.close();
 			c.commit();
 			c.close();
