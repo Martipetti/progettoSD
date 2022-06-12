@@ -3,6 +3,7 @@ package progettoBanca.classi;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import progettoBanca.ProgettoBancaApplication;
 
@@ -10,39 +11,47 @@ public class Account {
 	
 	private String name;
 	private String surname;
+	private String cf;
 	private String id;
 	private double balance;
 	private List<Transazione> transazioni;
 	
-	public Account(String name, String surname) throws ClassNotFoundException, SQLException {
+	public Account( String name, String surname, String cf ) throws ClassNotFoundException, SQLException {
 		super();
 		this.name = name;
 		this.surname = surname;
+		this.cf = cf;
 		this.id = createId();
 		this.balance = 0;
 		transazioni = new ArrayList<Transazione>();
-		ProgettoBancaApplication.database.creatAccount(id, name, surname, balance);
+		ProgettoBancaApplication.database.creatAccount( id, name, surname, cf, balance );
 	}
 
-	public Account(String id, String name, String surname, double balance) {
+	public Account( String id, String name, String surname, String cf, double balance ) {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.id = id;
+		this.cf = cf;
 		this.balance = balance;
 		transazioni = null;
 	}
 
-	//funzione per generare codice alfanumerico di lunghezza 20
+	//funzione per generare codice esadecimale di lunghezza 20
 	public String createId() {
-		String str = "0123456789" + "abcdefghijklmnopqrstuvxyz";
-		StringBuilder sb = new StringBuilder(20);
-
-		for (int i = 0; i < 20; i++) {
-			int index = (int)(str.length()* Math.random());
-			sb.append(str.charAt(index));
+		Random r;
+		int n;
+		String hexadecimal = "";
+		String id;
+	    
+		for(int i=0; i<3; i++) {
+			r = new Random();
+			n = r.nextInt();
+			hexadecimal += Integer.toHexString(n);
 		}
-		return sb.toString();
+		
+		id = hexadecimal.substring(0, 20);
+		return id;
 	}
 
 	public String getName() {
@@ -73,7 +82,15 @@ public class Account {
 		return balance;
 	}
 
-    public List<Transazione> getTransazioni() {
+    public String getCf() {
+		return cf;
+	}
+
+	public void setCf(String cf) {
+		this.cf = cf;
+	}
+
+	public List<Transazione> getTransazioni() {
 		return transazioni;
 	}
 

@@ -26,8 +26,8 @@ public class ProgettoBancaApplication {
 		
 //		account = new ArrayList<Account>();
 //		transazioni = new ArrayList<Transazione>();
-		Account a1 = new Account("Martino", "Pettinari");
-//		Account a2 = new Account("Daniela", "Merlo");
+		Account a1 = new Account("Martino", "Pettinari", "PTTMTN01C05F205O");
+		Account a2 = new Account("Daniela", "Merlo", "MRLDNLXXXXXXXXX");
 //		account.add(a1);
 //		account.add(a2);
 		

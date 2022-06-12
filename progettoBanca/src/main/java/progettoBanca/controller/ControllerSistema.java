@@ -28,21 +28,18 @@ public class ControllerSistema {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/api/account/")
 	public List<Account> getAccount() throws IOException, URISyntaxException, SQLException {
+		
 		return ProgettoBancaApplication.database.getAllAccount();
-//		return manageHtml("Index.html");
+		
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/api/account/")
-	public String makeAccount(@RequestBody String bodyString) throws ClassNotFoundException, SQLException {
+	public String makeAccount(@RequestBody String bodyString) throws SQLException, ClassNotFoundException {
 		
 		Map<String, String> body = parseBody(bodyString);
-		Account a = new Account(body.get("name"), body.get("surname"));
-		ProgettoBancaApplication.account.add(a);
+		Account a = new Account(body.get("name"), body.get("surname"), body.get("cf"));	
+		return a.getId();
 		
-		if(ProgettoBancaApplication.account.contains(a))
-			return a.getId();
-		else
-			return "Failed";	
 	}
 	
 //	@RequestMapping(method = RequestMethod.DELETE, value = "/api/account/")

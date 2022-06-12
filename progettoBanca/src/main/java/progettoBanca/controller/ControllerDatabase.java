@@ -41,10 +41,12 @@ public class ControllerDatabase {
 			c = DriverManager.getConnection("jdbc:sqlite:database.db");
 			
 			String account = "CREATE TABLE IF NOT EXISTS account ( " +
-					"ID TEXT PRIMARY KEY, " +
-					"NAME TEXT NOT NULL, " + 
-					"SURNAME TEXT NOT NULL,"+
-					"BALANCE INT NOT NULL);";
+					"ID TEXT NOT NULL, " +
+					"NAME VARCHAR(255) NOT NULL, " + 
+					"SURNAME VARCHAR(255) NOT NULL,"+
+					"CF VARCHAR(16) NOT NULL," +
+					"BALANCE INT NOT NULL," + 
+					"PRIMARY KEY (ID, CF));";
 			
 			stmt = c.createStatement(); 
 			stmt.executeUpdate(account);
@@ -58,7 +60,7 @@ public class ControllerDatabase {
         System.out.println( "Created account successfully" );
 	}
 	
-	public void creatAccount(String id, String name, String surname, double balance) throws ClassNotFoundException, SQLException {
+	public void creatAccount(String id, String name, String surname, String cf, double balance) throws ClassNotFoundException, SQLException {
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -68,8 +70,8 @@ public class ControllerDatabase {
 	
 	        stmt = c.createStatement();
 	
-			String query = "INSERT INTO account ( ID, NAME, SURNAME, BALANCE ) VALUES ( '" 
-					+ id + "', '" + name + "', '" + surname + "', '" + balance + "');";
+			String query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE ) VALUES ( '" 
+					+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "');";
 			
 			stmt.executeUpdate(query);
 			
@@ -84,11 +86,11 @@ public class ControllerDatabase {
 	}
 	
 	public List<Account> getAllAccount() throws SQLException{
-		JSONArray allAccount = new JSONArray();
-		JSONObject account = new JSONObject();
-		List<Account> account1 = new ArrayList<Account>();
+//		JSONArray allAccount = new JSONArray();
+//		JSONObject account = new JSONObject();
+		List<Account> account = new ArrayList<Account>();
 		String query = "SELECT * FROM account";
-		String id, name, surname;
+		String id, name, surname, cf;
 		double balance;
 //		String account = "";
 		
@@ -105,11 +107,12 @@ public class ControllerDatabase {
 			    id = rs.getString( "ID" );
 			    name = rs.getString( "NAME" );
 			    surname = rs.getString( "SURNAME" );
+			    cf = rs.getString( "CF" );
 			    balance = rs.getDouble( "BALANCE" );
 			    
-			    account1.add(new Account(id, name, surname, balance));
-////			    
-////			    account.add(new Account(id, name, surname, balance));	
+			    account.add(new Account( id, name, surname, cf, balance ));
+//			    
+//			    account.add(new Account(id, name, surname, balance));	
 //				account.put("name", name);
 //				account.put("surname", surname);
 //				account.put("id", id);
@@ -130,7 +133,7 @@ public class ControllerDatabase {
 		
 		System.out.println("Operation done successfully");
 		
-		return account1;
+		return account;
 	}
 	
 }
