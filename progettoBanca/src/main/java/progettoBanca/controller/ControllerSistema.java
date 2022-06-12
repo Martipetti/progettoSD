@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import progettoBanca.NotFoundException;
@@ -26,14 +27,14 @@ import progettoBanca.classi.Account;
 @RestController
 public class ControllerSistema {
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/api/account/")
+	@RequestMapping(method = RequestMethod.GET, value = "/api/account")
 	public List<Account> getAccount() throws IOException, URISyntaxException, SQLException {
 		
 		return ProgettoBancaApplication.database.getAllAccount();
 		
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/api/account/")
+	@RequestMapping(method = RequestMethod.POST, value = "/api/account")
 	public String makeAccount(@RequestBody String bodyString) throws SQLException, ClassNotFoundException {
 		
 		Map<String, String> body = parseBody(bodyString);
@@ -71,7 +72,7 @@ public class ControllerSistema {
 //		return id;
 //	}
 	
-	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}/")
+	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
 	public Account getAccount(@PathVariable String ID) {
 		Account tmp = null;
 	    for(Account account : ProgettoBancaApplication.account) {
@@ -89,24 +90,23 @@ public class ControllerSistema {
 		}
 	}
 	
-	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account/{ID}/")
-	public String removeAccount(@PathVariable String ID) {
-	    Account tmp = null;
+	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account")
+	public String removeAccount(@RequestParam(value = "id", defaultValue = "") String id) {
+	  /*  Account tmp = null;
 	    for(Account account : ProgettoBancaApplication.account) {
-			if(account.getId().equals(ID)) {
+			if(account.getId().equals(id)) {
 				tmp = account;
 				break;
 			}
 		}
 		
-	    if(tmp != null) {
-			if(ProgettoBancaApplication.account.remove(tmp))
-				return "OK";
-			else
-				throw new NotFoundException();
-		}
+	    if(tmp != null) {*/
+	    ProgettoBancaApplication.database.deleteAccount(id);	
+		return "OK";
+			
+		/*}
 		else
-			throw new NotFoundException();
+			throw new NotFoundException();*/
 	
 	}
 	

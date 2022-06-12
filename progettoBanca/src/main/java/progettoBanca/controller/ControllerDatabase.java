@@ -145,6 +145,30 @@ public class ControllerDatabase {
 		return account;
 	}
 	
+	public void deleteAccount ( String id ) {
+		String query = "DELETE FROM account WHERE ID = "+id;
+		try {
+			
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+			c.setAutoCommit(false);
+			System.out.println("Opened database successfully for query");
+			
+			stmt = c.createStatement();
+			stmt.executeUpdate (query);
+			c.commit ();
+	      	stmt.close();
+	      	c.close();
+	      	
+		} catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		}
+		
+		System.out.println("Operation done successfully");
+
+	}
+	
 }
 
 
