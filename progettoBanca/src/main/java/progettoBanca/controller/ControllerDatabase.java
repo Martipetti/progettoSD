@@ -146,7 +146,7 @@ public class ControllerDatabase {
 	}
 	
 	public void deleteAccount ( String id ) {
-		String query = "DELETE FROM account WHERE ID = "+id;
+		String query = "DELETE FROM account WHERE ID = '" + id +"'";
 		try {
 			
 			Class.forName("org.sqlite.JDBC");

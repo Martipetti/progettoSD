@@ -91,7 +91,7 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account")
-	public String removeAccount(@RequestParam(value = "id", defaultValue = "") String id) {
+	public String removeAccount(@RequestParam(value = "id") String id) {
 	  /*  Account tmp = null;
 	    for(Account account : ProgettoBancaApplication.account) {
 			if(account.getId().equals(id)) {
