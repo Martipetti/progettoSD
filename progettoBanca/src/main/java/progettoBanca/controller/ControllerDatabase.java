@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
 
@@ -56,6 +59,7 @@ public class ControllerDatabase {
 	}
 	
 	public void creatAccount(String id, String name, String surname, double balance) throws ClassNotFoundException, SQLException {
+		
 		try {
 			Class.forName("org.sqlite.JDBC");
 	        c = DriverManager.getConnection("jdbc:sqlite:database.db");
@@ -72,27 +76,61 @@ public class ControllerDatabase {
 			stmt.close();
 			c.commit();
 			c.close();
+			
 		} catch ( Exception e ) {
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	         System.exit(0);
 		}
 	}
 	
-	public static List<Account> getAllAccount() throws SQLException{
+	public List<Account> getAllAccount() throws SQLException{
+		JSONArray allAccount = new JSONArray();
+		JSONObject account = new JSONObject();
+		List<Account> account1 = new ArrayList<Account>();
 		String query = "SELECT * FROM account";
-		ResultSet rs = stmt.executeQuery(query);
-		List<Account> account = new ArrayList<Account>();
+		String id, name, surname;
+		double balance;
+//		String account = "";
 		
-		while (rs.next()) {
-		    String id = rs.getString( "ID" );
-		    String name = rs.getString( "NAME" );
-		    String surname = rs.getString( "SURNAME" );
-		    double balance = rs.getDouble( "BALANCE" );
-		    
-		    account.add(new Account(id, name, surname, balance));		
-	   }
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+			c.setAutoCommit(false);
+			System.out.println("Opened database successfully for query");
+			
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			while (rs.next()) {
+			    id = rs.getString( "ID" );
+			    name = rs.getString( "NAME" );
+			    surname = rs.getString( "SURNAME" );
+			    balance = rs.getDouble( "BALANCE" );
+			    
+			    account1.add(new Account(id, name, surname, balance));
+////			    
+////			    account.add(new Account(id, name, surname, balance));	
+//				account.put("name", name);
+//				account.put("surname", surname);
+//				account.put("id", id);
+//				account.put("balance", balance);
+//				
+//				allAccount.put(account);
+				
+			}
+			
+			rs.close();
+	      	stmt.close();
+	      	c.close();
+	      	
+		} catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		}
 		
-		return account;
+		System.out.println("Operation done successfully");
+		
+		return account1;
 	}
 	
 }

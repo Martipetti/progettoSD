@@ -28,7 +28,7 @@ public class ControllerSistema {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/api/account/")
 	public List<Account> getAccount() throws IOException, URISyntaxException, SQLException {
-		return ControllerDatabase.getAllAccount();
+		return ProgettoBancaApplication.database.getAllAccount();
 //		return manageHtml("Index.html");
 	}
 	

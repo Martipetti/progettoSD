@@ -80,6 +80,8 @@ public class Account {
 	public void setTransazioni(List<Transazione> transazioni) {
 		this.transazioni = transazioni;
 	}
+	
+	
 
 //	@Override
 //	public boolean equals(Object obj) {
