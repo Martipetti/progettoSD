@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
+import progettoBanca.classi.Transazione;
 
 public class ControllerDatabase {
 	
@@ -171,6 +172,45 @@ public class ControllerDatabase {
 		System.out.println("Operation done successfully");
 		
 		return account;
+	}
+	
+	public List<Transazione> getTransation() throws SQLException{
+//		JSONArray allAccount = new JSONArray();
+//		JSONObject account = new JSONObject();
+		List<Transazione> transazioni = new ArrayList<Transazione>();
+		String query = "SELECT IDE, DATA FROM transation";
+		String ide;
+		Date data;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+			c.setAutoCommit(false);
+			System.out.println("Opened database successfully for query");
+			
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			while (rs.next()) {
+			    ide = rs.getString( "IDE" );
+			    data = rs.getDate( "DATA" );
+			    
+			    transazioni.add(new Transazione( ide, data ));
+				
+			}
+			
+			rs.close();
+	      	stmt.close();
+	      	c.close();
+	      	
+		} catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		}
+		
+		System.out.println("Operation done successfully");
+		
+		return transazioni;
 	}
 	
 	public void deleteAccount ( String id ) {

@@ -3,13 +3,15 @@ package progettoBanca.classi;
 import java.util.Date;
 import java.util.UUID;
 
+import progettoBanca.ProgettoBancaApplication;
+
 public class Transazione {
-	private UUID ide;
+	private String ide;
 	private Date data;
 	public Transazione() {
 		super();
 		data = new Date(); 
-		this.ide= UUID.randomUUID();
+		this.ide = UUID.randomUUID().toString();
 	}
 	
 	//identificativo transizione di lunghezza 5
@@ -23,10 +25,17 @@ public class Transazione {
 		}
 		return sb.toString();
 	}*/
+	
+	public Transazione(String ide, Date data) {
+		this.ide = ide;
+		this.data = data;
+	}
 
-	public UUID getIde() {
+	public String getIde() {
 		return ide;
 	}
+
+	
 
 	public Date getData() {
 		return data;
