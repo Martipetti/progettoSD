@@ -92,6 +92,31 @@ public class ControllerDatabase {
         
 	}
 	
+	private void createFlowTable() throws ClassNotFoundException {
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+			
+			String flow = "CREATE TABLE IF NOT EXISTS flow ( " +
+					"IDE TEXT PRIMARY KEY  NOT NULL, " +
+					"ID TEXT NOT NULL, " +
+					"CF VARCHAR(16) NOT NULL," +
+					"FOREIGN KEY (ID, CF) REFERENCES account(ID, CF));" ;
+			
+			stmt = c.createStatement(); 
+			stmt.executeUpdate(flow);
+			stmt.close();
+         	c.close();
+    	} catch ( SQLException e ) {
+    		e.printStackTrace();
+    		System.exit( 0 );
+    	}
+		
+        System.out.println( "Created flow successfully" );
+        
+	}
+	
 	public void creatAccount(String id, String name, String surname, String cf, double balance) throws ClassNotFoundException, SQLException {
 		String query = "SELECT CF FROM account";
 		String cf1= "";
