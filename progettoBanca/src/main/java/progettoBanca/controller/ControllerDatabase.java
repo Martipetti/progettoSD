@@ -18,7 +18,8 @@ public class ControllerDatabase {
 	
 	public Connection c = null;
 	public static Statement stmt = null;
-
+	
+	//metodo per la creazione del database
 	public void createDatabase() throws ClassNotFoundException{
 		
 		try {
@@ -33,8 +34,10 @@ public class ControllerDatabase {
 		createAccountTransition();
 		
 		System.out.println("Opened/created database successfully"); 
+		
 	}
-
+	
+	//metodo privato per la creazione della tabella account
 	private void createAccountTable() throws ClassNotFoundException { 
 
 		try {
@@ -51,16 +54,18 @@ public class ControllerDatabase {
 			
 			stmt = c.createStatement(); 
 			stmt.executeUpdate(account);
-//			System.out.println( "executeUpdate() returned " + rv );
 			stmt.close();
          	c.close();
     	} catch ( SQLException e ) {
     		e.printStackTrace();
     		System.exit( 0 );
     	}
+		
         System.out.println( "Created account successfully" );
+        
 	}
 	
+	//metodo privato creazione singola transazione
 	private void createAccountTransition() throws ClassNotFoundException { 
 
 		try {
@@ -76,18 +81,19 @@ public class ControllerDatabase {
 			
 			stmt = c.createStatement(); 
 			stmt.executeUpdate(transation);
-//			System.out.println( "executeUpdate() returned " + rv );
 			stmt.close();
          	c.close();
     	} catch ( SQLException e ) {
     		e.printStackTrace();
     		System.exit( 0 );
     	}
+		
         System.out.println( "Created transation successfully" );
+        
 	}
 	
 	public void creatAccount(String id, String name, String surname, String cf, double balance) throws ClassNotFoundException, SQLException {
-		String q = "SELECT CF FROM account";
+		String query = "SELECT CF FROM account";
 		String cf1= "";
 		boolean b = true;
 		try {
@@ -97,7 +103,7 @@ public class ControllerDatabase {
 	        System.out.println("Opened database successfully");
 	
 	        stmt = c.createStatement();
-	        ResultSet rs = stmt.executeQuery(q);
+	        ResultSet rs = stmt.executeQuery(query);
 	        while (rs.next() && b) {
 			    cf1 = rs.getString( "CF" );
 			    if(! cf1.equals( cf ) )
@@ -106,11 +112,11 @@ public class ControllerDatabase {
 			    	b = false;
 	        }
 	        	
-	        		if( b == true ) {
-	        		String query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE ) VALUES ( '" 
-	        		+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "');";
-			 		stmt.executeUpdate(query);
-	        						}
+    		if( b == true ) {
+	    		query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE ) VALUES ( '" 
+	    				+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "');";
+		 				stmt.executeUpdate(query);
+    		}
 	        
 			stmt.close();
 			c.commit();
@@ -130,7 +136,6 @@ public class ControllerDatabase {
 		String query = "SELECT * FROM account";
 		String id, name, surname, cf;
 		double balance;
-//		String account = "";
 		
 		try {
 			Class.forName("org.sqlite.JDBC");
@@ -149,7 +154,7 @@ public class ControllerDatabase {
 			    balance = rs.getDouble( "BALANCE" );
 			    
 			    account.add(new Account( id, name, surname, cf, balance ));
-//			    
+			    
 //			    account.add(new Account(id, name, surname, balance));	
 //				account.put("name", name);
 //				account.put("surname", surname);
@@ -214,9 +219,9 @@ public class ControllerDatabase {
 	
    public Account getAllTransation(String id) throws SQLException{
 		
-	    Account a = null;
+	    Account account = null;
 		List<Transazione> transazioni = getTransation(id);
-		String query = "SELECT NAME, SURNAME, BALANCE FROM account WHERE ID = '" + id +"' ";
+		String query = "SELECT NAME, SURNAME, BALANCE FROM account WHERE ID = '" + id + "' ";
 		String  nome, cognome;
 		double balance;
 		
@@ -234,7 +239,7 @@ public class ControllerDatabase {
 			    cognome = rs.getString( "SURNAME" );
 			    balance = rs.getDouble( "BALANCE" );
 			    
-			    a = new Account(nome, cognome, balance, transazioni);
+			    account = new Account(nome, cognome, balance, transazioni);
 				
 			}
 			
@@ -249,7 +254,7 @@ public class ControllerDatabase {
 		
 		System.out.println("Operation done successfully");
 		
-		return a;
+		return account;
 	}
 	
 	

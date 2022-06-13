@@ -43,74 +43,28 @@ public class ControllerSistema {
 		
 	}
 	
-//	@RequestMapping(method = RequestMethod.DELETE, value = "/api/account/")
-//	public String deleteAccount(@RequestBody String bodyString) {
-//		Map<String, String> body = parseBody(bodyString);
-//		String id = body.get("id");
-//		
-//		Account tmp = null;
-//		for(Account element : ProgettoBancaApplication.account) {
-//			if(element.getId().equals(id)) {
-//				tmp = element;
-//				if(ProgettoBancaApplication.account.remove(tmp)) {
-//					return "OK";
-//				}
-//				break;
-//			}
-//		}
-//		if(tmp != null) {
-//			if(ProgettoBancaApplication.account.remove(tmp)) {
-//				return "OK";
-//			}
-//			else {
-//				return "Failed";
-//			}
-//		}
-//		else {
-//			return "Failed";
-//		}
-//		return id;
-//	}
+	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account")
+	public String removeAccount(@RequestParam(value = "id") String id) {
+
+	    ProgettoBancaApplication.database.deleteAccount( id );	
+		return "OK";
+	
+	}
+	
 	
 	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
 	public Account getAccount(@PathVariable String ID) throws SQLException {
-	/*	Account tmp = null;
-	    for(Account account : ProgettoBancaApplication.account) {
-			if(account.getId().equals(ID)) {
-				tmp = account;
-				break;
-			}
-		}
-	    
-	    if(tmp != null) {		
-			return tmp; //SISTEMARE
-	    }
-		else {
-			throw new NotFoundException();
-		}*/
 		
 		return ProgettoBancaApplication.database.getAllTransation( ID );
-	}
-	
-	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account")
-	public String removeAccount(@RequestParam(value = "id") String id) {
-	  /*  Account tmp = null;
-	    for(Account account : ProgettoBancaApplication.account) {
-			if(account.getId().equals(id)) {
-				tmp = account;
-				break;
-			}
-		}
 		
-	    if(tmp != null) {*/
-	    ProgettoBancaApplication.database.deleteAccount( id );	
-		return "OK";
-			
-		/*}
-		else
-			throw new NotFoundException();*/
-	
 	}
+	
+	@RequestMapping(method=RequestMethod.POST, value = "/api/account/{ID}")
+	public void getFlow(@PathVariable String ID, @RequestParam(value = "amount") double amount) {
+		//to-do
+	}
+
+	
 	
 	
 	//metodo per la costruzione della pagina html

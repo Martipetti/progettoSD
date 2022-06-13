@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import progettoBanca.ProgettoBancaApplication;
 
 public class Account {

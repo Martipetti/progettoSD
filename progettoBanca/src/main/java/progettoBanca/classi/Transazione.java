@@ -6,25 +6,25 @@ import java.util.UUID;
 import progettoBanca.ProgettoBancaApplication;
 
 public class Transazione {
+	
 	private String ide;
 	private Date data;
-	public Transazione() {
-		super();
+	private String idSender;
+	private String idReceiver;
+	private String cfSender;
+	private String cfReceiver;
+	private double amount;
+	
+	public Transazione(Account sender, Account receiver, double amount) {
+		//super();
 		data = new Date(); 
 		this.ide = UUID.randomUUID().toString();
+		this.idSender = sender.getId();
+		this.idReceiver = receiver.getId();
+		this.cfSender = sender.getCf();
+		this.cfReceiver = receiver.getCf();
+		this.amount = amount;
 	}
-	
-	//identificativo transizione di lunghezza 5
-	/*String createIDE() {
-		String str = "0123456789" + "abcdefghijklmnopqrstuvxyz";
-		StringBuilder sb = new StringBuilder(5);
-
-		for (int i = 0; i < 5; i++) {
-			int index = (int)(str.length()* Math.random());
-			sb.append(str.charAt(index));
-		}
-		return sb.toString();
-	}*/
 	
 	public Transazione(String ide, Date data) {
 		this.ide = ide;
@@ -35,11 +35,8 @@ public class Transazione {
 		return ide;
 	}
 
-	
-
 	public Date getData() {
 		return data;
 	}
 	
-
 }
