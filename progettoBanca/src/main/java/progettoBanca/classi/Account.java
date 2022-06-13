@@ -28,15 +28,26 @@ public class Account {
 	}
 
 	public Account( String id, String name, String surname, String cf, double balance ) {
+		this(id, name, surname, cf, balance, null);
+	}
+
+	public Account( String id, String name, String surname, String cf, double balance, List<Transazione> transazioni ) {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.id = id;
 		this.cf = cf;
 		this.balance = balance;
-		transazioni = null;
+		this.transazioni = transazioni;
+	} 
+	
+	public Account( String name, String surname, double balance, List<Transazione> transazioni ) {
+		this.name = name;
+		this.surname = surname;
+		this.balance = balance;
+		this.transazioni = transazioni;
 	}
-
+	
 	//funzione per generare codice esadecimale di lunghezza 20
 	public String createId() {
 		Random r;

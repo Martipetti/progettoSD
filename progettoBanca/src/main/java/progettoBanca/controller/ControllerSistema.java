@@ -73,8 +73,8 @@ public class ControllerSistema {
 //	}
 	
 	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
-	public Account getAccount(@PathVariable String ID) {
-		Account tmp = null;
+	public Account getAccount(@PathVariable String ID) throws SQLException {
+	/*	Account tmp = null;
 	    for(Account account : ProgettoBancaApplication.account) {
 			if(account.getId().equals(ID)) {
 				tmp = account;
@@ -87,7 +87,9 @@ public class ControllerSistema {
 	    }
 		else {
 			throw new NotFoundException();
-		}
+		}*/
+		
+		return ProgettoBancaApplication.database.getAllTransation( ID );
 	}
 	
 	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account")

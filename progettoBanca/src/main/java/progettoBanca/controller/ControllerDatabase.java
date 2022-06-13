@@ -174,11 +174,10 @@ public class ControllerDatabase {
 		return account;
 	}
 	
-	public List<Transazione> getTransation() throws SQLException{
-//		JSONArray allAccount = new JSONArray();
-//		JSONObject account = new JSONObject();
+	private List<Transazione> getTransation(String id) throws SQLException{
+		
 		List<Transazione> transazioni = new ArrayList<Transazione>();
-		String query = "SELECT IDE, DATA FROM transation";
+		String query = "SELECT IDE, DATA FROM transation WHERE ID = '" + id +"' ";
 		String ide;
 		Date data;
 		
@@ -212,6 +211,47 @@ public class ControllerDatabase {
 		
 		return transazioni;
 	}
+	
+   public Account getAllTransation(String id) throws SQLException{
+		
+	    Account a = null;
+		List<Transazione> transazioni = getTransation(id);
+		String query = "SELECT NAME, SURNAME, BALANCE FROM account WHERE ID = '" + id +"' ";
+		String  nome, cognome;
+		double balance;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+			c.setAutoCommit(false);
+			System.out.println("Opened database successfully for query");
+			
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			while (rs.next()) {
+			    nome = rs.getString( "NAME" );
+			    cognome = rs.getString( "SURNAME" );
+			    balance = rs.getDouble( "BALANCE" );
+			    
+			    a = new Account(nome, cognome, balance, transazioni);
+				
+			}
+			
+			rs.close();
+	      	stmt.close();
+	      	c.close();
+	      	
+		} catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		}
+		
+		System.out.println("Operation done successfully");
+		
+		return a;
+	}
+	
 	
 	public void deleteAccount ( String id ) {
 		String query = "DELETE FROM account WHERE ID = '" + id +"' ";
