@@ -18,6 +18,7 @@ public class Account {
 	private double balance;
 	private List<Transazione> transazioni;
 	
+	
 	public Account( String name, String surname, String cf ) throws ClassNotFoundException, SQLException {
 		super();
 		this.name = name;

@@ -26,9 +26,10 @@ public class Flow {
 		this.idAccount = idAccount;
 		this.amount = amount;
 		ProgettoBancaApplication.database.createFlow(amount, ide, idAccount);
-		//da finire, fare query ricerca cf
+		
 	}
-
+	
+	@JsonIgnore
 	public double getAmount() {
 		return amount;
 	}

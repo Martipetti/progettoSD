@@ -62,8 +62,8 @@ public class ControllerSistema {
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/account/{ID}")
 	public Flow getFlow(@PathVariable String ID, @RequestParam(value = "amount") double amount) {
-		
-		return new Flow(amount, ID);
+		Flow f = new Flow(amount, ID);
+		return f;
 	}
 
 	

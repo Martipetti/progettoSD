@@ -125,10 +125,7 @@ public class ControllerDatabase {
 		String cf1= "";
 		boolean b = true;
 		try {
-			Class.forName("org.sqlite.JDBC");
-	        c = DriverManager.getConnection("jdbc:sqlite:database.db");
-	        c.setAutoCommit(false);
-	        System.out.println("Opened database successfully");
+			openDatabase();
 	
 	        stmt = c.createStatement();
 	        ResultSet rs = stmt.executeQuery(query);
@@ -166,10 +163,7 @@ public class ControllerDatabase {
 		double balance;
 		
 		try {
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:database.db");
-			c.setAutoCommit(false);
-			System.out.println("Opened database successfully for query");
+			openDatabase();
 			
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
@@ -215,10 +209,7 @@ public class ControllerDatabase {
 		Date data;
 		
 		try {
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:database.db");
-			c.setAutoCommit(false);
-			System.out.println("Opened database successfully for query");
+			openDatabase();
 			
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
@@ -254,10 +245,7 @@ public class ControllerDatabase {
 		double balance;
 		
 		try {
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:database.db");
-			c.setAutoCommit(false);
-			System.out.println("Opened database successfully for query");
+			openDatabase();
 			
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(query);
@@ -290,10 +278,7 @@ public class ControllerDatabase {
 		String query = "DELETE FROM account WHERE ID = '" + id +"' ";
 		try {
 			
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:database.db");
-			c.setAutoCommit(false);
-			System.out.println("Opened database successfully for query");
+			openDatabase();
 			
 			stmt = c.createStatement();
 			stmt.executeUpdate (query);
@@ -311,7 +296,9 @@ public class ControllerDatabase {
 	}
 	
 	public void createFlow(double amount, String ide, String idAccount) {
-		String cf = getCf(idAccount);
+		
+		String cf = getCf( idAccount );
+		updateBalance(amount, idAccount);
 		String query = "INSERT INTO flow ( IDE, ID, CF, AMOUNT ) VALUES ( '" 
 				+ ide + "', '" + idAccount + "', '" + cf + "', '" + amount + "');";
 		
@@ -321,10 +308,7 @@ public class ControllerDatabase {
 		
 		try {
 			
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:database.db");
-			c.setAutoCommit(false);
-			System.out.println("Opened database successfully for query");
+			openDatabase();
 			
 			stmt = c.createStatement();
 			stmt.executeUpdate (query);
@@ -345,16 +329,15 @@ public class ControllerDatabase {
 		String cf = null;
 		
 		try {
-			Class.forName("org.sqlite.JDBC");
-	        c = DriverManager.getConnection("jdbc:sqlite:database.db");
-	        c.setAutoCommit(false);
-	        System.out.println("Opened database successfully");
-	
+			
+			openDatabase();
 	        stmt = c.createStatement();
 	        ResultSet rs = stmt.executeQuery(query);
 	        
+	        while (rs.next()) {
 		    cf = rs.getString( "CF" );
-		    
+	        }
+	        
 		    rs.close();
 	      	stmt.close();
 	      	c.close();
@@ -367,22 +350,21 @@ public class ControllerDatabase {
 		return cf;
 	}
 	
-	private String getBalance(String idAccount) {
+	public double getBalance(String idAccount) {
 			
-		String query = "SELECT BALANCE FROM account";
-		String cf = null;
+		String query = "SELECT BALANCE FROM account WHERE ID = '" + idAccount + "';"; 
+		double balance = 0.0;
 		
 		try {
-			Class.forName("org.sqlite.JDBC");
-	        c = DriverManager.getConnection("jdbc:sqlite:database.db");
-	        c.setAutoCommit(false);
-	        System.out.println("Opened database successfully");
-	
-	        stmt = c.createStatement();
+			
+			openDatabase();
+			stmt = c.createStatement();
 	        ResultSet rs = stmt.executeQuery(query);
 	        
-		    cf = rs.getString( "CF" );
-		    
+	        while (rs.next()) {
+		    balance = rs.getDouble( "BALANCE" );
+	        }
+	        
 		    rs.close();
 	      	stmt.close();
 	      	c.close();
@@ -392,8 +374,53 @@ public class ControllerDatabase {
 	         System.exit(0);
 		}
 		
-		return cf;
+		return balance;
 	}
+	
+   private void openDatabase() throws ClassNotFoundException, SQLException {
+	   Class.forName("org.sqlite.JDBC");
+       c = DriverManager.getConnection("jdbc:sqlite:database.db");
+       c.setAutoCommit(false);
+       System.out.println("Opened database successfully");
+   }
+   
+   private void updateBalance( double amount, String id) {
+	   
+	   double balance = getBalance(id);
+	   try {
+		      openDatabase();
+
+		      stmt = c.createStatement ();
+		      if( amount < 0 ) {
+		    	  
+			        if(balance < amount) {
+			        	
+			        	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
+					    System.exit (0);
+					    
+			        }
+			        else {
+			        	String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
+					    stmt.executeUpdate ( query );
+			        }
+			        
+		      }
+		      else {
+		      
+		      String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
+		      stmt.executeUpdate ( query );
+		      
+		      }
+		      
+		      c.commit ();
+		      stmt.close ();
+		      c.close ();
+		      
+		    } catch (Exception e) {
+		      System.err.println (e.getClass().getName() + ":" + e.getMessage());
+		      System.exit (0);
+		    }
+   }
 	
 }
 
