@@ -94,6 +94,7 @@ public class ControllerDatabase {
         
 	}
 	
+	//metodo privato creazione tabella flow
 	private void createFlowTable() throws ClassNotFoundException {
 		
 		try {
@@ -153,7 +154,6 @@ public class ControllerDatabase {
 		}
 	}
 	
-
 	public List<Account> getAllAccount() throws SQLException{
 //		JSONArray allAccount = new JSONArray();
 //		JSONObject account = new JSONObject();
@@ -175,15 +175,7 @@ public class ControllerDatabase {
 			    cf = rs.getString( "CF" );
 			    balance = rs.getDouble( "BALANCE" );
 			    
-			    account.add(new Account( id, name, surname, cf, balance ));
-			    
-//			    account.add(new Account(id, name, surname, balance));	
-//				account.put("name", name);
-//				account.put("surname", surname);
-//				account.put("id", id);
-//				account.put("balance", balance);
-//				
-//				allAccount.put(account);
+			    account.add( new Account( id, name, surname, cf, balance, null ) );
 				
 			}
 			
@@ -236,7 +228,7 @@ public class ControllerDatabase {
 		return transazioni;
 	}
 	
-   public Account getAllTransation(String id) throws SQLException{
+	public Account getAllTransation(String id) throws SQLException{
 		
 	    Account account = null;
 		List<Transazione> transazioni = getTransation(id);
@@ -272,8 +264,7 @@ public class ControllerDatabase {
 		
 		return account;
 	}
-	
-	
+		
 	public void deleteAccount ( String id ) {
 		String query = "DELETE FROM account WHERE ID = '" + id +"' ";
 		try {
@@ -377,14 +368,41 @@ public class ControllerDatabase {
 		return balance;
 	}
 	
-   private void openDatabase() throws ClassNotFoundException, SQLException {
+	public String getNomeCognom(String idAccount) {
+		
+		String query = "SELECT NAME, SURNAME FROM account WHERE ID = '" + idAccount + "';"; 
+		String response = null;
+		
+		try {
+			
+			openDatabase();
+	        stmt = c.createStatement();
+	        ResultSet rs = stmt.executeQuery(query);
+	        
+	        while (rs.next()) {
+	        	response = rs.getString( "NAME" ) + ";" + rs.getString( "SURNAME" );
+	        }
+	        
+		    rs.close();
+	      	stmt.close();
+	      	c.close();
+			    
+		} catch ( Exception e ) {
+	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	         System.exit(0);
+		}
+		
+		return response;
+	}
+	
+	private void openDatabase() throws ClassNotFoundException, SQLException {
 	   Class.forName("org.sqlite.JDBC");
        c = DriverManager.getConnection("jdbc:sqlite:database.db");
        c.setAutoCommit(false);
        System.out.println("Opened database successfully");
-   }
+	}
    
-   private void updateBalance( double amount, String id) {
+	private void updateBalance( double amount, String id) {
 	   
 	   double balance = getBalance(id);
 	   try {
@@ -416,12 +434,53 @@ public class ControllerDatabase {
 		      stmt.close ();
 		      c.close ();
 		      
-		    } catch (Exception e) {
+	    } catch (Exception e) {
 		      System.err.println (e.getClass().getName() + ":" + e.getMessage());
 		      System.exit (0);
-		    }
-   }
+	    }
+	}
 	
+	public void updateValueAccount( String what, String value, String id) throws ClassNotFoundException, SQLException {
+		
+		openDatabase();
+
+		try {
+			stmt = c.createStatement ();
+	      
+	    	String query = "UPDATE account SET NAME = '" + value + "' WHERE ID = '" + id + "';";  
+		    stmt.executeUpdate ( query );
+
+		    c.commit ();
+		    stmt.close ();
+		    c.close ();
+	      
+		} catch (Exception e) {
+			System.err.println (e.getClass().getName() + ":" + e.getMessage());
+			System.exit (0);
+		}
+	}
+	
+	public void updateAccount( String name, String surname, String cf, String id) {
+		try {
+		      openDatabase();
+		      
+		      stmt = c.createStatement ();
+		      
+		      String query = "UPDATE account set ID = '" + id + "', NAME = '" 
+		      + name + "', SURNAME = '" + surname + "', CF = '" 
+		    		  + cf + "' WHERE ID = '" + id + "';";  
+		      
+		      stmt.executeUpdate ( query );
+		      
+		      c.commit ();
+		      stmt.close ();
+		      c.close ();
+		      
+	    } catch (Exception e) {
+		      System.err.println (e.getClass().getName() + ":" + e.getMessage());
+		      System.exit (0);
+	    }
+	}
 }
 
 

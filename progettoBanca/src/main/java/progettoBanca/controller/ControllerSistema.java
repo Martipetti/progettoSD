@@ -13,6 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,14 +66,32 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/account/{ID}")
-	public Flow getFlow(@PathVariable String ID, @RequestParam(value = "amount") double amount) {
-		Flow f = new Flow(amount, ID);
+	public Flow getFlow(@PathVariable String ID, @RequestBody String bodyString) {
+		Map<String, String> body = parseBody(bodyString);
+		Flow f = new Flow( Double.parseDouble(body.get("amount")), ID);
 		return f;
 	}
+	
+	@RequestMapping(method=RequestMethod.PUT, value = "/api/account/{ID}") // da sistemare
+	public void putAccount( @RequestBody String bodyString, @PathVariable String ID ) {
+		Map<String, String> body = parseBody(bodyString);
+		ProgettoBancaApplication.database.updateAccount( body.get("name"), body.get("surname"), body.get("cf"), ID);
+	}
+	
+	@RequestMapping(method=RequestMethod.PATCH, value = "/api/account/{ID}")
+	public void patchAccount(@RequestBody String bodyString, @PathVariable String ID ) throws ClassNotFoundException, SQLException {
+		Map<String, String> body = parseBody(bodyString);
+		ProgettoBancaApplication.database.updateValueAccount( "NOME", body.get("name"), ID);
+	}
+	
+	@RequestMapping(method=RequestMethod.HEAD, value="/api/account/{ID}")
+	public ResponseEntity<String> headAccount( @PathVariable String ID ) {
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.set( "X-Sistema-Bancario", ProgettoBancaApplication.database.getNomeCognom(ID) );
 
-	
-	
-	
+	    return ResponseEntity.ok().headers(headers).body("Response with header using ResponseEntity");
+	}
+
 	//metodo per la costruzione della pagina html
 	public String manageHtml(String name) throws URISyntaxException, IOException {
 		URL res = getClass().getClassLoader().getResource(name);
