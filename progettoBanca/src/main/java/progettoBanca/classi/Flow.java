@@ -4,26 +4,28 @@ import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import progettoBanca.ProgettoBancaApplication;
+
 public class Flow {
 	
 	private double amount;
 	private String ide;
-	private String id;
-	private String cf;
+	private String idAccount;
 	
-	public Flow(double amount, String ide, Account account) {
+	public Flow(double amount, String ide, String idAccount) {
 		super();
 		this.amount = amount;
 		this.ide = ide;
-		this.id = account.getId();
+		this.idAccount = idAccount;
 		
 	}
 	
 
-	public Flow(double amount, String id) {
-		this.ide = ide;
-		this.id = id;
+	public Flow(double amount, String idAccount) {
+		this.ide = UUID.randomUUID().toString();
+		this.idAccount = idAccount;
 		this.amount = amount;
+		ProgettoBancaApplication.database.createFlow(amount, ide, idAccount);
 		//da finire, fare query ricerca cf
 	}
 
@@ -37,7 +39,7 @@ public class Flow {
 
 	@JsonIgnore
 	public String getId() {
-		return id;
+		return idAccount;
 	}
 	
 	

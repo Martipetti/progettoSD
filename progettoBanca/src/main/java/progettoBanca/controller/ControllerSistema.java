@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import progettoBanca.NotFoundException;
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
+import progettoBanca.classi.Flow;
 
 @RestController
 public class ControllerSistema {
@@ -60,8 +61,9 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/account/{ID}")
-	public void getFlow(@PathVariable String ID, @RequestParam(value = "amount") double amount) {
-		//to-do
+	public Flow getFlow(@PathVariable String ID, @RequestParam(value = "amount") double amount) {
+		
+		return new Flow(amount, ID);
 	}
 
 	

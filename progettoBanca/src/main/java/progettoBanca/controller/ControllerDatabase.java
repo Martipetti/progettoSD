@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import progettoBanca.NotFoundException;
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
 import progettoBanca.classi.Transazione;
@@ -32,6 +33,7 @@ public class ControllerDatabase {
 		
 		createAccountTable();
 		createAccountTransition();
+		createFlowTable();
 		
 		System.out.println("Opened/created database successfully"); 
 		
@@ -102,6 +104,7 @@ public class ControllerDatabase {
 					"IDE TEXT PRIMARY KEY  NOT NULL, " +
 					"ID TEXT NOT NULL, " +
 					"CF VARCHAR(16) NOT NULL," +
+					"AMOUNT DOUBLE NOT NULL," +
 					"FOREIGN KEY (ID, CF) REFERENCES account(ID, CF));" ;
 			
 			stmt = c.createStatement(); 
@@ -140,7 +143,7 @@ public class ControllerDatabase {
     		if( b == true ) {
 	    		query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE ) VALUES ( '" 
 	    				+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "');";
-		 				stmt.executeUpdate(query);
+ 				stmt.executeUpdate(query);
     		}
 	        
 			stmt.close();
@@ -305,6 +308,91 @@ public class ControllerDatabase {
 		
 		System.out.println( "Operation done successfully" );
 
+	}
+	
+	public void createFlow(double amount, String ide, String idAccount) {
+		String cf = getCf(idAccount);
+		String query = "INSERT INTO flow ( IDE, ID, CF, AMOUNT ) VALUES ( '" 
+				+ ide + "', '" + idAccount + "', '" + cf + "', '" + amount + "');";
+		
+		if( cf == null) {
+			throw new NotFoundException();
+		}
+		
+		try {
+			
+			Class.forName("org.sqlite.JDBC");
+			c = DriverManager.getConnection("jdbc:sqlite:database.db");
+			c.setAutoCommit(false);
+			System.out.println("Opened database successfully for query");
+			
+			stmt = c.createStatement();
+			stmt.executeUpdate (query);
+			c.commit ();
+	      	stmt.close();
+	      	c.close();
+	      	
+		} catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		}
+		
+	}
+	
+	private String getCf(String idAccount) {
+		
+		String query = "SELECT CF FROM account WHERE ID = '" + idAccount + "';"; 
+		String cf = null;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+	        c = DriverManager.getConnection("jdbc:sqlite:database.db");
+	        c.setAutoCommit(false);
+	        System.out.println("Opened database successfully");
+	
+	        stmt = c.createStatement();
+	        ResultSet rs = stmt.executeQuery(query);
+	        
+		    cf = rs.getString( "CF" );
+		    
+		    rs.close();
+	      	stmt.close();
+	      	c.close();
+			    
+		} catch ( Exception e ) {
+	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	         System.exit(0);
+		}
+		
+		return cf;
+	}
+	
+	private String getBalance(String idAccount) {
+			
+		String query = "SELECT BALANCE FROM account";
+		String cf = null;
+		
+		try {
+			Class.forName("org.sqlite.JDBC");
+	        c = DriverManager.getConnection("jdbc:sqlite:database.db");
+	        c.setAutoCommit(false);
+	        System.out.println("Opened database successfully");
+	
+	        stmt = c.createStatement();
+	        ResultSet rs = stmt.executeQuery(query);
+	        
+		    cf = rs.getString( "CF" );
+		    
+		    rs.close();
+	      	stmt.close();
+	      	c.close();
+			    
+		} catch ( Exception e ) {
+	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	         System.exit(0);
+		}
+		
+		return cf;
 	}
 	
 }
