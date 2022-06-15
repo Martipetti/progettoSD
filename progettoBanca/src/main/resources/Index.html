@@ -43,6 +43,10 @@
             </div>
         </div>
 
+        <div id="tipo">
+            <h1>ciao</h1>
+        </div>
+
         <script>
             var id = "";
 
@@ -50,12 +54,16 @@
                 
                 $("button").click(function(){
                     id = getId();
-                    $.get("http://localhost:8080/api/account/"+id, 
-                        function(data){
-                            alert("Data: " + JSON.parse(data));
+                    $.ajax({
+                        type: "GET",        
+                        dataType: "json",
+                        url: "http://localhost:8080/api/account", 
+
+                        complete: function(data){ 
+                            $("#tipo").html("<h1>"+data.responseText+"</h1>");
+                        }
                     });
                 });
-
             });
 
             function getId(){
