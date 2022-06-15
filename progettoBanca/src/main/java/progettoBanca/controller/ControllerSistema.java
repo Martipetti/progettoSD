@@ -36,6 +36,8 @@ import progettoBanca.classi.Transazione;
 @RestController
 public class ControllerSistema {
 	
+	//end-point : /
+	
 	//end-point : /api/account
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/api/account")
