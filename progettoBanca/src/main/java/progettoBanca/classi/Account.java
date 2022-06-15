@@ -44,13 +44,7 @@ public class Account {
 		this.transazioni = transazioni;
 	} 
 	
-//	public Account( String name, String surname, double balance, List<Transazione> transazioni ) {
-//		this.name = name;
-//		this.surname = surname;
-//		this.balance = balance;
-//		this.transazioni = transazioni;
-//	}
-	
+
 	//funzione per generare codice esadecimale di lunghezza 20
 	public String createId() {
 		Random r;

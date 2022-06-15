@@ -199,7 +199,7 @@ public class ControllerDatabase {
 	public List<Object> getAccountTransation(String id) throws SQLException{
 		
 		List<Object> info = new ArrayList<Object>();
-		String query1 = "SELECT * FROM account";
+		String query1 = "SELECT * FROM account WHERE ID = '" + id +"' ";
 		String query2 = "SELECT IDE FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
 		String ide, name, surname, cf;
 		double balance;
@@ -210,6 +210,7 @@ public class ControllerDatabase {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(query1);
 			
+			while (rs.next()) {
 			id = rs.getString( "ID" );
 		    name = rs.getString( "NAME" );
 		    surname = rs.getString( "SURNAME" );
@@ -217,8 +218,9 @@ public class ControllerDatabase {
 		    balance = rs.getDouble( "BALANCE" );
 		    
 		    info.add( new Account( id, name, surname, cf, balance, null ) );
+			}
 		    
-		    rs = stmt.executeQuery(query2);
+			rs = stmt.executeQuery(query2);
 			
 			while (rs.next()) {
 			    ide = rs.getString( "IDE" );
@@ -244,44 +246,7 @@ public class ControllerDatabase {
 	
 	public void createTransation(String from, String to, double amount) {
 		
-	}
-	
-//	public Account getAllTransation(String id) throws SQLException{
-//		
-//	    Account account = null;
-//		List<Transazione> transazioni = getTransation(id);
-//		String query = "SELECT NAME, SURNAME, BALANCE FROM account WHERE ID = '" + id + "' ";
-//		String  nome, cognome;
-//		double balance;
-//		
-//		try {
-//			openDatabase();
-//			
-//			stmt = c.createStatement();
-//			ResultSet rs = stmt.executeQuery(query);
-//			
-//			while (rs.next()) {
-//			    nome = rs.getString( "NAME" );
-//			    cognome = rs.getString( "SURNAME" );
-//			    balance = rs.getDouble( "BALANCE" );
-//			    
-//			    account = new Account(nome, cognome, balance, transazioni);
-//				
-//			}
-//			
-//			rs.close();
-//	      	stmt.close();
-//	      	c.close();
-//	      	
-//		} catch ( Exception e ) {
-//		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-//		      System.exit(0);
-//		}
-//		
-//		System.out.println("Operation done successfully");
-//		
-//		return account;
-//	}
+	}	
 		
 	public void deleteAccount ( String id ) {
 		String query = "DELETE FROM account WHERE ID = '" + id +"' ";
