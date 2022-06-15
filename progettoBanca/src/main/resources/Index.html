@@ -44,7 +44,6 @@
         </div>
 
         <div id="tipo">
-            <p>ciao</p>
         </div>
 
         <script>
@@ -59,8 +58,8 @@
                         dataType: "json",
                         url: urlStr, 
 
-                        complete: function(data){ 
-                            $("#tipo").html("<p>"+data.responseText+"</p>");
+                        complete: function (data) {
+                            setData(data.responseText);
                         },
                         error: function (data) {
                             alert(data.body);
@@ -68,6 +67,15 @@
                     });
                 });
             });
+
+            function setData(data) {
+                $("#tipo").html("ciao");
+                var str = data;
+                // for(var i=0; i<data.length; i++) {      
+                //     str += "<p>"+data[i].name+"</p>"
+                // }    
+                $("#tipo").html(str);
+		    }
 
             function getId(){
                 id = $("#input").val();
