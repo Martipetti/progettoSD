@@ -19,10 +19,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import progettoBanca.NotFoundException;
@@ -72,16 +74,16 @@ public class ControllerSistema {
 		return f;
 	}
 	
-	@RequestMapping(method=RequestMethod.PUT, value = "/api/account/{ID}") // da sistemare
-	public void putAccount( @RequestBody String bodyString, @PathVariable String ID ) {
-		Map<String, String> body = parseBody(bodyString);
-		ProgettoBancaApplication.database.updateAccount( body.get("name"), body.get("surname"), body.get("cf"), ID);
+	@RequestMapping(method=RequestMethod.PUT, value = "/api/account/{ID}" )
+	public ResponseEntity<?> putAccount(@PathVariable String ID, @RequestParam String name, @RequestParam String surname, @RequestParam String cf )  {
+		ProgettoBancaApplication.database.updateAccount(name, surname, cf, ID);
+		return ResponseEntity.ok("resource update");
 	}
 	
 	@RequestMapping(method=RequestMethod.PATCH, value = "/api/account/{ID}")
-	public void patchAccount(@RequestBody String bodyString, @PathVariable String ID ) throws ClassNotFoundException, SQLException {
-		Map<String, String> body = parseBody(bodyString);
-		ProgettoBancaApplication.database.updateValueAccount( "NOME", body.get("name"), ID);
+	public ResponseEntity<?> patchAccount(@PathVariable String ID, @RequestParam String name) throws ClassNotFoundException, SQLException {
+		ProgettoBancaApplication.database.updateValueAccount( "NAME", name, ID);
+		return ResponseEntity.ok("resource update");
 	}
 	
 	@RequestMapping(method=RequestMethod.HEAD, value="/api/account/{ID}")

@@ -447,7 +447,7 @@ public class ControllerDatabase {
 		try {
 			stmt = c.createStatement ();
 	      
-	    	String query = "UPDATE account SET NAME = '" + value + "' WHERE ID = '" + id + "';";  
+	    	String query = "UPDATE account SET '" + what + "'= '" + value + "' WHERE ID = '" + id + "';";  
 		    stmt.executeUpdate ( query );
 
 		    c.commit ();
@@ -466,9 +466,8 @@ public class ControllerDatabase {
 		      
 		      stmt = c.createStatement ();
 		      
-		      String query = "UPDATE account set ID = '" + id + "', NAME = '" 
-		      + name + "', SURNAME = '" + surname + "', CF = '" 
-		    		  + cf + "' WHERE ID = '" + id + "';";  
+		      String query = "UPDATE account set CF = '" + cf + "', NAME = '" 
+		      + name + "', SURNAME = '" + surname + "' WHERE ID = '" + id + "';";  
 		      
 		      stmt.executeUpdate ( query );
 		      
