@@ -11,24 +11,46 @@ public class Transazione {
 	
 	private String ide;
 	private Date data;
-	private String idSender;
-	private String idReceiver;
+	private String from;
+	private double SaldoSender;
+	private String to;
 	private double amount;
+	private double SaldoReiver;
 	
 	public Transazione(String sender, String receiver, double amount) {
 		//super();
 		data = new Date(); 
 		this.ide = UUID.randomUUID().toString();
-		this.idSender = sender;
-		this.idReceiver = receiver;
+		this.from = sender;
+		this.to = receiver;
 		this.amount = amount;
-		ProgettoBancaApplication.database.createTransation(ide, data, amount, idSender, idReceiver);
+		this.SaldoSender = ProgettoBancaApplication.database.getBalance( from );
+		this.SaldoReiver = ProgettoBancaApplication.database.getBalance( to );
+		ProgettoBancaApplication.database.createTransation(ide, data, amount, from, to);
 	}
 	
 	public Transazione(String ide) {
 		this.ide = ide;
 	}
 
+	public String getIdSender() {
+		return from;
+	}
+	
+	public double getBilancioS() {
+		SaldoSender = ProgettoBancaApplication.database.getBalance( from );
+		return SaldoSender;
+	}
+	
+	public String getIdReceiver() {
+		return to;
+	}
+	
+	public double getBilancioR() {
+		SaldoReiver = ProgettoBancaApplication.database.getBalance( to );
+		return SaldoReiver;
+	}
+	
 	public String getIde() {
 		return ide;
 	}

@@ -244,10 +244,7 @@ public class ControllerDatabase {
 		return info;
 	}
 	
-	public void createTransation(String from, String to, double amount) {
-		
-	}	
-		
+
 	public void deleteAccount ( String id ) {
 		String query = "DELETE FROM account WHERE ID = '" + id +"' ";
 		try {
@@ -297,13 +294,23 @@ public class ControllerDatabase {
 		
 	}
 	
-	public void createTransation(String ide, Date data, double amount, String idSender, String idReceiver) {
+	public void createTransation(String ide, Date data, double amount, String from, String to) {
 		
-		String cfS = getCf( idSender );
-		String cfR = getCf( idReceiver );
-		updateBalance(amount, idReceiver);
+		double balance = getBalance(from);
+		if(balance < amount || amount <= 0) {
+        	
+        	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
+		    System.exit (0);
+		    
+        }
+		
+		updateBalance(amount, to);
+		updateBalance(-amount, from);
+		
+		String cfS = getCf( from );
+		String cfR = getCf( to );
 		String query = "INSERT INTO transation ( IDE, DATA, ID1, CF1, ID2, CF2 ) VALUES ( '" 
-				+ ide + "', '" + data + "', '" + idSender + "', '" + cfS + "', '" + idReceiver + "', '" + cfR + "');";
+				+ ide + "', '" + data + "', '" + from + "', '" + cfS + "', '" + to + "', '" + cfR + "');";
 		
 		if( cfS == null || cfR == null) {
 			throw new NotFoundException();
