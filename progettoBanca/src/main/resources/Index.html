@@ -35,7 +35,7 @@
 
         <div class="row" style="margin-left: 3px;">
             <div id="form" class="col" style="margin-top: 20px;">
-                <input type="text" name="id" class="form-control" placeholder="Id account" aria-label="Id account">
+                <input type="text" id="input" name="id" class="form-control" placeholder="Id account" aria-label="Id account">
             </div>
             <div class="col" style="margin-top: 20px;">
                 <button id="btn" type="button" class="btn btn-outline-primary">Ricerca</button>
@@ -44,30 +44,34 @@
         </div>
 
         <div id="tipo">
-            <h1>ciao</h1>
+            <p>ciao</p>
         </div>
 
         <script>
             var id = "";
+            var urlStr;
 
             $(document).ready(function() {
-                
                 $("button").click(function(){
-                    id = getId();
+                    urlStr = "http://localhost:8080/api/account/" + $("#input").val();
                     $.ajax({
                         type: "GET",        
                         dataType: "json",
-                        url: "http://localhost:8080/api/account", 
+                        url: urlStr, 
 
                         complete: function(data){ 
-                            $("#tipo").html("<h1>"+data.responseText+"</h1>");
+                            $("#tipo").html("<p>"+data.responseText+"</p>");
+                        },
+                        error: function (data) {
+                            alert(data.body);
                         }
                     });
                 });
             });
 
             function getId(){
-                id = $("input").val();
+                id = $("#input").val();
+                console.log("http://localhost:8080/api/account/"+id);
             };
         </script>
 
