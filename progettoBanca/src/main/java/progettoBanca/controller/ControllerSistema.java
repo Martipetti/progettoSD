@@ -63,7 +63,7 @@ public class ControllerSistema {
 	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
 	public Account getAccount(@PathVariable String ID) throws SQLException {
 		
-		return ProgettoBancaApplication.database.getAllTransation( ID );
+		return ProgettoBancaApplication.database.getTransation( ID );
 		
 	}
 	

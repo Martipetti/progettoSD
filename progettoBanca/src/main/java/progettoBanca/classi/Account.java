@@ -44,12 +44,12 @@ public class Account {
 		this.transazioni = transazioni;
 	} 
 	
-	public Account( String name, String surname, double balance, List<Transazione> transazioni ) {
-		this.name = name;
-		this.surname = surname;
-		this.balance = balance;
-		this.transazioni = transazioni;
-	}
+//	public Account( String name, String surname, double balance, List<Transazione> transazioni ) {
+//		this.name = name;
+//		this.surname = surname;
+//		this.balance = balance;
+//		this.transazioni = transazioni;
+//	}
 	
 	//funzione per generare codice esadecimale di lunghezza 20
 	public String createId() {
@@ -72,25 +72,16 @@ public class Account {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 
 	public String getSurname() {
 		return surname;
 	}
 
-	public void setSurname(String surname) {
-		this.surname = surname;
-	}
 
 	public String getId() {
 		return id;
 	}
 	
-	public void setBalance(double balance) {
-		this.balance += balance;
-	}
 	
 	public double getBalance() {
 		return balance;
@@ -100,51 +91,11 @@ public class Account {
 		return cf;
 	}
 
-	public void setCf(String cf) {
-		this.cf = cf;
-	}
 
 	public List<Transazione> getTransazioni() {
 		return transazioni;
 	}
 
-	public void setTransazioni(List<Transazione> transazioni) {
-		this.transazioni = transazioni;
-	}
-	
-	
-
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Account other = (Account) obj;
-//		if (id == null) {
-//			if (other.id != null)
-//				return false;
-//		} else if (!id.equals(other.id))
-//			return false;
-//		if (name == null) {
-//			if (other.name != null)
-//				return false;
-//		} else if (!name.equals(other.name))
-//			return false;
-//		if (surname == null) {
-//			if (other.surname != null)
-//				return false;
-//		} else if (!surname.equals(other.surname))
-//			return false;
-//		if (transazioni == null) {
-//			if (other.transazioni != null)
-//				return false;
-//		} else if (!transazioni.equals(other.transazioni))
-//			return false;
-//		return true;
-//	}
 	
 	
 	

@@ -79,7 +79,10 @@ public class ControllerDatabase {
 					"DATA DATE NOT NULL," +
 					"ID TEXT NOT NULL, " +
 					"CF VARCHAR(16) NOT NULL," +
-					"FOREIGN KEY (ID, CF) REFERENCES account(ID, CF));" ;
+					"ID2 TEXT NOT NULL, " +
+					"CF2 VARCHAR(16) NOT NULL," +
+					"FOREIGN KEY (ID, CF) REFERENCES account(ID, CF))," +
+					"FOREIGN KEY (ID2, CF2) REFERENCES account(ID, CF)),";
 			
 			stmt = c.createStatement(); 
 			stmt.executeUpdate(transation);
@@ -193,12 +196,11 @@ public class ControllerDatabase {
 		return account;
 	}
 	
-	private List<Transazione> getTransation(String id) throws SQLException{
+	public Account getTransation(String id) throws SQLException{
 		
 		List<Transazione> transazioni = new ArrayList<Transazione>();
-		String query = "SELECT IDE, DATA FROM transation WHERE ID = '" + id +"' ";
+		String query = "SELECT IDE FROM transation WHERE ID = '" + id +"' ORDER BY DATA ASC";
 		String ide;
-		Date data;
 		
 		try {
 			openDatabase();
@@ -208,11 +210,11 @@ public class ControllerDatabase {
 			
 			while (rs.next()) {
 			    ide = rs.getString( "IDE" );
-			    data = rs.getDate( "DATA" );
 			    
-			    transazioni.add(new Transazione( ide, data ));
+			    transazioni.add(new Transazione( ide ));
 				
 			}
+			
 			
 			rs.close();
 	      	stmt.close();
@@ -228,42 +230,42 @@ public class ControllerDatabase {
 		return transazioni;
 	}
 	
-	public Account getAllTransation(String id) throws SQLException{
-		
-	    Account account = null;
-		List<Transazione> transazioni = getTransation(id);
-		String query = "SELECT NAME, SURNAME, BALANCE FROM account WHERE ID = '" + id + "' ";
-		String  nome, cognome;
-		double balance;
-		
-		try {
-			openDatabase();
-			
-			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			
-			while (rs.next()) {
-			    nome = rs.getString( "NAME" );
-			    cognome = rs.getString( "SURNAME" );
-			    balance = rs.getDouble( "BALANCE" );
-			    
-			    account = new Account(nome, cognome, balance, transazioni);
-				
-			}
-			
-			rs.close();
-	      	stmt.close();
-	      	c.close();
-	      	
-		} catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
-		}
-		
-		System.out.println("Operation done successfully");
-		
-		return account;
-	}
+//	public Account getAllTransation(String id) throws SQLException{
+//		
+//	    Account account = null;
+//		List<Transazione> transazioni = getTransation(id);
+//		String query = "SELECT NAME, SURNAME, BALANCE FROM account WHERE ID = '" + id + "' ";
+//		String  nome, cognome;
+//		double balance;
+//		
+//		try {
+//			openDatabase();
+//			
+//			stmt = c.createStatement();
+//			ResultSet rs = stmt.executeQuery(query);
+//			
+//			while (rs.next()) {
+//			    nome = rs.getString( "NAME" );
+//			    cognome = rs.getString( "SURNAME" );
+//			    balance = rs.getDouble( "BALANCE" );
+//			    
+//			    account = new Account(nome, cognome, balance, transazioni);
+//				
+//			}
+//			
+//			rs.close();
+//	      	stmt.close();
+//	      	c.close();
+//	      	
+//		} catch ( Exception e ) {
+//		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+//		      System.exit(0);
+//		}
+//		
+//		System.out.println("Operation done successfully");
+//		
+//		return account;
+//	}
 		
 	public void deleteAccount ( String id ) {
 		String query = "DELETE FROM account WHERE ID = '" + id +"' ";
@@ -294,6 +296,35 @@ public class ControllerDatabase {
 				+ ide + "', '" + idAccount + "', '" + cf + "', '" + amount + "');";
 		
 		if( cf == null) {
+			throw new NotFoundException();
+		}
+		
+		try {
+			
+			openDatabase();
+			
+			stmt = c.createStatement();
+			stmt.executeUpdate (query);
+			c.commit ();
+	      	stmt.close();
+	      	c.close();
+	      	
+		} catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		}
+		
+	}
+	
+	public void createTransation(String ide, Date data, double amount, String idSender, String idReceiver) {
+		
+		String cfS = getCf( idSender );
+		String cfR = getCf( idReceiver );
+		updateBalance(amount, idReceiver);
+		String query = "INSERT INTO transation ( IDE, DATA, ID, CF, ID2, CF2 ) VALUES ( '" 
+				+ ide + "', '" + data + "', '" + idSender + "', '" + cfS + "', '" + idReceiver + "', '" + cfR + "');";
+		
+		if( cfS == null || cfR == null) {
 			throw new NotFoundException();
 		}
 		
