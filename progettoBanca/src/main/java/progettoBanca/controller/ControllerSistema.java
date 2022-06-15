@@ -71,10 +71,13 @@ public class ControllerSistema {
 	//end-point : /api/account/{ID}
 	
 	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
-	public List<Object> getAccount(@PathVariable String ID) throws SQLException {
+	public ResponseEntity<List<Object>> getAccount(@PathVariable String ID) throws SQLException {
 		
-		return ProgettoBancaApplication.database.getAccountTransation( ID );
-		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.set( "X-Sistema-Bancario", ProgettoBancaApplication.database.getNomeCognom(ID) );
+	    List<Object> list = ProgettoBancaApplication.database.getAccountTransation( ID );
+	    return ResponseEntity.ok().headers(headers).body(list);
+				
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/account/{ID}")
