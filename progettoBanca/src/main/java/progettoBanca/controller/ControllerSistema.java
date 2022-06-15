@@ -31,9 +31,12 @@ import progettoBanca.NotFoundException;
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
 import progettoBanca.classi.Flow;
+import progettoBanca.classi.Transazione;
 
 @RestController
 public class ControllerSistema {
+	
+	//end-point : /api/account
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/api/account")
 	public List<Account> getAccount() throws IOException, URISyntaxException, SQLException {
@@ -59,11 +62,12 @@ public class ControllerSistema {
 	
 	}
 	
+	//end-point : /api/account/{ID}
 	
 	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
-	public Account getAccount(@PathVariable String ID) throws SQLException {
+	public List<Object> getAccount(@PathVariable String ID) throws SQLException {
 		
-		return ProgettoBancaApplication.database.getTransation( ID );
+		return ProgettoBancaApplication.database.getAccountTransation( ID );
 		
 	}
 	
@@ -92,6 +96,12 @@ public class ControllerSistema {
 	    headers.set( "X-Sistema-Bancario", ProgettoBancaApplication.database.getNomeCognom(ID) );
 
 	    return ResponseEntity.ok().headers(headers).body("Response with header using ResponseEntity");
+	}
+	
+	//end-point : /api/transfer
+	@RequestMapping(method=RequestMethod.POST, value = "/api/transfer")
+	public void postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) {
+		new Transazione(from, to, amount);
 	}
 
 	//metodo per la costruzione della pagina html

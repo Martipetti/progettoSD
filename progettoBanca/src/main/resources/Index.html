@@ -35,7 +35,7 @@
 
         <div class="row" style="margin-left: 3px;">
             <div id="form" class="col" style="margin-top: 20px;">
-                <input type="text" class="form-control" placeholder="Id account" aria-label="Id account">
+                <input type="text" name="id" class="form-control" placeholder="Id account" aria-label="Id account">
             </div>
             <div class="col" style="margin-top: 20px;">
                 <button id="btn" type="button" class="btn btn-outline-primary">Ricerca</button>
@@ -44,16 +44,21 @@
         </div>
 
         <script>
+            var id = "";
+
             $(document).ready(function() {
-                $("#form").validate({
-                    rules: {
-                        field1: "required"
-                    },
-                    messages: {
-                        field1: "Please specify your name"
-                    }
-                })
-            });//non va
+                
+                $("button").click(function(){
+                    $.get("http://localhost:8080/api/account/"+getId(), function(data, status){
+                        alert("Data: " + data + "\nStatus: " + status);
+                    });
+                });
+
+            });
+
+            function getId(){
+                id = $("input").val();
+            };
         </script>
 
     </body>

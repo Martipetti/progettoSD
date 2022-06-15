@@ -15,12 +15,12 @@ public class Transazione {
 	private String idReceiver;
 	private double amount;
 	
-	public Transazione(Account sender, Account receiver, double amount) {
+	public Transazione(String sender, String receiver, double amount) {
 		//super();
 		data = new Date(); 
 		this.ide = UUID.randomUUID().toString();
-		this.idSender = sender.getId();
-		this.idReceiver = receiver.getId();
+		this.idSender = sender;
+		this.idReceiver = receiver;
 		this.amount = amount;
 		ProgettoBancaApplication.database.createTransation(ide, data, amount, idSender, idReceiver);
 	}

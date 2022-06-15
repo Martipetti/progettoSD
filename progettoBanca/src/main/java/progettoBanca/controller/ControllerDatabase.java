@@ -32,7 +32,7 @@ public class ControllerDatabase {
 		}
 		
 		createAccountTable();
-		createAccountTransition();
+		createTransationTable();
 		createFlowTable();
 		
 		System.out.println("Opened/created database successfully"); 
@@ -68,21 +68,21 @@ public class ControllerDatabase {
 	}
 	
 	//metodo privato creazione singola transazione
-	private void createAccountTransition() throws ClassNotFoundException { 
+	private void createTransationTable() throws ClassNotFoundException { 
 
 		try {
 			Class.forName("org.sqlite.JDBC");
 			c = DriverManager.getConnection("jdbc:sqlite:database.db");
 			
 			String transation = "CREATE TABLE IF NOT EXISTS transation ( " +
-					"IDE TEXT PRIMARY KEY  NOT NULL, " +
+					"IDE TEXT PRIMARY KEY NOT NULL, " +
 					"DATA DATE NOT NULL," +
-					"ID TEXT NOT NULL, " +
-					"CF VARCHAR(16) NOT NULL," +
+					"ID1 TEXT NOT NULL, " +
+					"CF1 VARCHAR(16) NOT NULL," +
 					"ID2 TEXT NOT NULL, " +
 					"CF2 VARCHAR(16) NOT NULL," +
-					"FOREIGN KEY (ID, CF) REFERENCES account(ID, CF))," +
-					"FOREIGN KEY (ID2, CF2) REFERENCES account(ID, CF)),";
+					"FOREIGN KEY (ID1, CF1) REFERENCES account(ID, CF)," +
+					"FOREIGN KEY (ID2, CF2) REFERENCES account(ID, CF) );";
 			
 			stmt = c.createStatement(); 
 			stmt.executeUpdate(transation);
@@ -196,22 +196,34 @@ public class ControllerDatabase {
 		return account;
 	}
 	
-	public Account getTransation(String id) throws SQLException{
+	public List<Object> getAccountTransation(String id) throws SQLException{
 		
-		List<Transazione> transazioni = new ArrayList<Transazione>();
-		String query = "SELECT IDE FROM transation WHERE ID = '" + id +"' ORDER BY DATA ASC";
-		String ide;
+		List<Object> info = new ArrayList<Object>();
+		String query1 = "SELECT * FROM account";
+		String query2 = "SELECT IDE FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
+		String ide, name, surname, cf;
+		double balance;
 		
 		try {
 			openDatabase();
 			
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
+			ResultSet rs = stmt.executeQuery(query1);
+			
+			id = rs.getString( "ID" );
+		    name = rs.getString( "NAME" );
+		    surname = rs.getString( "SURNAME" );
+		    cf = rs.getString( "CF" );
+		    balance = rs.getDouble( "BALANCE" );
+		    
+		    info.add( new Account( id, name, surname, cf, balance, null ) );
+		    
+		    rs = stmt.executeQuery(query2);
 			
 			while (rs.next()) {
 			    ide = rs.getString( "IDE" );
 			    
-			    transazioni.add(new Transazione( ide ));
+			    info.add(new Transazione( ide ));
 				
 			}
 			
@@ -227,7 +239,11 @@ public class ControllerDatabase {
 		
 		System.out.println("Operation done successfully");
 		
-		return transazioni;
+		return info;
+	}
+	
+	public void createTransation(String from, String to, double amount) {
+		
 	}
 	
 //	public Account getAllTransation(String id) throws SQLException{
@@ -321,7 +337,7 @@ public class ControllerDatabase {
 		String cfS = getCf( idSender );
 		String cfR = getCf( idReceiver );
 		updateBalance(amount, idReceiver);
-		String query = "INSERT INTO transation ( IDE, DATA, ID, CF, ID2, CF2 ) VALUES ( '" 
+		String query = "INSERT INTO transation ( IDE, DATA, ID1, CF1, ID2, CF2 ) VALUES ( '" 
 				+ ide + "', '" + data + "', '" + idSender + "', '" + cfS + "', '" + idReceiver + "', '" + cfR + "');";
 		
 		if( cfS == null || cfR == null) {
