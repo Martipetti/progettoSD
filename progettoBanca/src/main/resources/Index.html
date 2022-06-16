@@ -25,6 +25,9 @@
         <script
             src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"
             type="text/javascript"></script>
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+            
 
         <div style="background-color: rgb(218, 235, 250);">
             <nav class="nav" style="padding-bottom: 25px; padding-top: 25px; font-size: large;">
@@ -35,7 +38,7 @@
 
         <div class="row" style="margin-left: 3px;">
             <div id="form" class="col" style="margin-top: 20px;">
-                <input type="text" id="input" name="id" class="form-control" placeholder="Id account" aria-label="Id account">
+                <input type="text" for="field" id="input" name="id" class="form-control" placeholder="Id account" aria-label="Id account">
             </div>
             <div class="col" style="margin-top: 20px;">
                 <button id="btn" type="button" class="btn btn-outline-primary">Ricerca</button>
@@ -71,22 +74,30 @@
         <script>
             var id = "";
             var urlStr;
+            var validator;
 
             $(document).ready(function() {
                 $("button").click(function(){
-                    urlStr = "http://localhost:8080/api/account/" + $("#input").val();
-                    $.ajax({
-                        type: "GET",        
-                        dataType: "json",
-                        url: urlStr, 
+                    id = $("#input").val();
+                    if(id != null || id != "") {
+                        // validator.element( "#input" );
+                        urlStr = "http://localhost:8080/api/account/" + $("#input").val();
+                        $.ajax({
+                            type: "GET",        
+                            dataType: "json",
+                            url: urlStr, 
+                            cache: false,
 
-                        complete: function (data) {
-                            setData(data.responseText);
-                        },
-                        error: function (data) {
-                            alert(data.body);
-                        }
-                    });
+                            complete: function (data) {
+                                setData(data.responseText);
+                            },
+                            error: function (data) {
+                                alert(data.body);
+                            }
+                        })
+                    } else {
+                        $("#input").css("color", "#d9534f");
+                    }
                 });
             });
 
@@ -101,12 +112,34 @@
                 $("#userInfo").html(str); 
                 // var str = data;
                 // $("#tipo").html(data);
-		    }
+		    };
 
             function getId(){
                 id = $("#input").val();
                 console.log("http://localhost:8080/api/account/"+id);
             };
+
+
+            // $( "#form" ).validate({
+            //     rules: {
+            //         field: {
+            //             required: true
+            //         }
+            //     }
+            // });
+            // var validator = $( "#form" ).validate({
+            //     rules: {
+            //         field: {
+            //             required: true
+            //         }
+            //     },
+            //     messages: {
+            //         field1: "Please specify your name"
+            //     }
+            // });
+
+
+            
         </script>
 
     </body>

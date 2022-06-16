@@ -52,8 +52,6 @@ public class ControllerDatabase {
 					"SURNAME VARCHAR(255) NOT NULL,"+
 					"CF VARCHAR(16) NOT NULL," +
 					"BALANCE INT NOT NULL," + 
-					"TRANSAZIONE TEXT NOT NULL," +
-					"FOREIGN KEY (TRANSAZIONE) REFERENCES transation ( ID1 )," +
 					"PRIMARY KEY (ID, CF));";
 			
 			stmt = c.createStatement(); 
@@ -161,12 +159,9 @@ public class ControllerDatabase {
 	}
 	
 	public List<Account> getAllAccount() throws SQLException{
-//		JSONArray allAccount = new JSONArray();
-//		JSONObject account = new JSONObject();
 		List<Account> account = new ArrayList<Account>();
 		String query = "SELECT * FROM account";
 		String id, name, surname, cf;
-		List transazioni;
 		double balance;
 		
 		try {
@@ -181,8 +176,7 @@ public class ControllerDatabase {
 			    surname = rs.getString( "SURNAME" );
 			    cf = rs.getString( "CF" );
 			    balance = rs.getDouble( "BALANCE" );
-			    transazioni = rs.getArray("TRANSAZIONE");
-			    account.add( new Account( id, name, surname, cf, balance, null ) );
+			    account.add( new Account( id, name, surname, cf, balance ) );
 				
 			}
 			
@@ -222,7 +216,7 @@ public class ControllerDatabase {
 		    cf = rs.getString( "CF" );
 		    balance = rs.getDouble( "BALANCE" );
 		    
-		    a = new Account( id, name, surname, cf, balance, null );
+		    a = new Account( id, name, surname, cf, balance );
 		    info.add( a );
 			
 		    
@@ -231,12 +225,10 @@ public class ControllerDatabase {
 			while (rs.next()) {
 			    ide = rs.getString( "IDE" );
 			    
-			 a.getTransazioni().add(new Transazione ( ide ));
+			    info.add(new Transazione ( ide ));
 
-			 
 			}
-			
-			
+				
 			rs.close();
 	      	stmt.close();
 	      	c.close();

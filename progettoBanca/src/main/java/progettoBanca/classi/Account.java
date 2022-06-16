@@ -16,7 +16,7 @@ public class Account {
 	private String cf;
 	private String id;
 	private double balance;
-	private List<Transazione> transazioni;
+//	private List<Transazione> transazioni;
 	
 	
 	public Account( String name, String surname, String cf ) throws ClassNotFoundException, SQLException {
@@ -26,22 +26,18 @@ public class Account {
 		this.cf = cf;
 		this.id = createId();
 		this.balance = 0;
-		transazioni = new ArrayList<Transazione>();
+//		transazioni = new ArrayList<Transazione>();
 		ProgettoBancaApplication.database.creatAccount( id, name, surname, cf, balance);
 	}
 
 	public Account( String id, String name, String surname, String cf, double balance ) {
-		this(id, name, surname, cf, balance, null);
-	}
-
-	public Account( String id, String name, String surname, String cf, double balance, List<Transazione> transazioni ) {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.id = id;
 		this.cf = cf;
 		this.balance = balance;
-		this.transazioni = transazioni;
+//		this.transazioni = transazioni;
 	} 
 	
 
@@ -85,11 +81,7 @@ public class Account {
 		return cf;
 	}
 
-
-	public List<Transazione> getTransazioni() {
-		return transazioni;
-	}
-
+ 
 	
 	
 	
