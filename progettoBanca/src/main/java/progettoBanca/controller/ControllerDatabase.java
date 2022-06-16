@@ -199,9 +199,10 @@ public class ControllerDatabase {
 		Account a;
 		List<Object> info = new ArrayList<Object>();
 		String query1 = "SELECT * FROM account WHERE ID = '" + id +"' ";
-		String query2 = "SELECT IDE FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
-		String ide, name, surname, cf;
+		String query2 = "SELECT * FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
+		String ide, name, surname, cf, sender, receiver;
 		double balance;
+		Date data;
 		
 		try {
 			openDatabase();
@@ -219,13 +220,14 @@ public class ControllerDatabase {
 		    a = new Account( id, name, surname, cf, balance );
 		    info.add( a );
 			
-		    
 			rs = stmt.executeQuery(query2);
 			
 			while (rs.next()) {
 			    ide = rs.getString( "IDE" );
+			    sender = rs.getString( "ID1" );
+			    receiver = rs.getString( "ID2" );
 			    
-			    info.add(new Transazione ( ide ));
+			    info.add(new Transazione ( ide, sender, receiver, 0.0 )); //costruttore : String ide, String sender, String receiver, double amount
 
 			}
 				

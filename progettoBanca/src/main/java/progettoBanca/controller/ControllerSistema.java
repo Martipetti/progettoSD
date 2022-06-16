@@ -37,9 +37,17 @@ import progettoBanca.classi.Transazione;
 public class ControllerSistema {
 	
 	//end-point : /
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public String index() throws URISyntaxException, IOException {
 		return manageHtml("Index.html");
+	}
+	
+	//end-point : /transfer
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/transfer")
+	public String transfer() throws URISyntaxException, IOException {
+		return manageHtml("Transfer.html");
 	}
 	
 	//end-point : /api/account

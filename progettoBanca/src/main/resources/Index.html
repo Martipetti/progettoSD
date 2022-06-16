@@ -46,12 +46,13 @@
             </div>
         </div>
 
-        <table class="table" style="margin-top: 20px; margin-left: 5px; margin-right: 5px;">
+        <table class="table" style="margin-top: 50px; margin-left: 5px; margin-right: 5px;">
             <thead>
               <tr style="color: #007bff;">
                 <th scope="col">Nome</th>
                 <th scope="col">Cognome</th>
                 <th scope="col">Codice Fiscale</th>
+                <th scope="col">Saldo</th>
               </tr>
             </thead>
             <tbody id="userInfo">
@@ -66,7 +67,7 @@
                 <th scope="col">Ammontare</th>
                </tr>
             </thead>
-            <tbody id="userInfo">
+            <tbody id="transationInfo">
             </tbody>
         </table>
        
@@ -77,14 +78,17 @@
             var validator;
 
             $(document).ready(function() {
+
                 $("button").click(function(){
                     id = $("#input").val();
-                    if(id != null || id != "") {
+                    console.log(id);
+                    if(id.length == 20) {
                         // validator.element( "#input" );
-                        urlStr = "http://localhost:8080/api/account/" + $("#input").val();
+                        urlStr = "http://localhost:8080/api/account/" + id;
+                        console.log(urlStr);
                         $.ajax({
                             type: "GET",        
-                            dataType: "json",
+                            dataType: 'json',
                             url: urlStr, 
                             cache: false,
 
@@ -96,28 +100,25 @@
                             }
                         })
                     } else {
-                        $("#input").css("color", "#d9534f");
+                        $("#input").addClass("is-invalid");
                     }
                 });
+
             });
 
             function setData(data) {
-                // var newdata = JSON.stringify(data);
-                var json = JSON.parse(data);
-                var str = "<tr><td>"+ json[0].name + "</td><td>" + json[0].surname + "</td><td>" + json[0].cf + "</td></tr>";
-                // str =  "<tr><td>"+ data.name + "</td><td>" + data.surname + "</td><td>" + data.cf + "</td></tr>" ;
-                // for(var i=0; i<data.length; i++) {      
-                //     str += "<p>"+data[i].name+"</p>"
-                // }    
-                $("#userInfo").html(str); 
-                // var str = data;
-                // $("#tipo").html(data);
+                    // var newdata = JSON.stringify(data);
+                    var json = JSON.parse(data);
+                    var str = "<tr><td>"+ json[0].name + "</td><td>" + json[0].surname + "</td><td>" + json[0].cf + "</td><td>" + json[0].balance + "</td></tr>";
+                    var transation = "";
+                    //for(var i=1; i<=json.length; i++) {      
+                        transation += "<tr><td>" + 1 + "</td><td>" + json[1].idReceiver + "</td><td>" + "double" + "</td></tr>"; 
+                   // }    
+                    $("#userInfo").html( str ); 
+                    $("#transationInfo").html( transation ); 
+                    // var str = data;
+                    // $("#tipo").html(data);
 		    };
-
-            function getId(){
-                id = $("#input").val();
-                console.log("http://localhost:8080/api/account/"+id);
-            };
 
 
             // $( "#form" ).validate({

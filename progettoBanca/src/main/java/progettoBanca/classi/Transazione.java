@@ -14,7 +14,7 @@ public class Transazione {
 	private String from;
 	private double SaldoSender;
 	private String to;
-	private double amount;
+	private double amount; // da inserire
 	private double SaldoReiver;
 	
 	public Transazione(String sender, String receiver, double amount) {
@@ -29,8 +29,11 @@ public class Transazione {
 		ProgettoBancaApplication.database.createTransation(ide, data, amount, from, to);
 	}
 	
-	public Transazione(String ide) {
+	public Transazione( String ide, String sender, String receiver, double amount ) {
 		this.ide = ide;
+		this.from = sender;
+		this.to = receiver;
+		this.amount = amount;
 	}
 
 	public String getIdSender() {
