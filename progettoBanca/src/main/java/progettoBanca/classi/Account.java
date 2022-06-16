@@ -27,7 +27,7 @@ public class Account {
 		this.id = createId();
 		this.balance = 0;
 		transazioni = new ArrayList<Transazione>();
-		ProgettoBancaApplication.database.creatAccount( id, name, surname, cf, balance );
+		ProgettoBancaApplication.database.creatAccount( id, name, surname, cf, balance);
 	}
 
 	public Account( String id, String name, String surname, String cf, double balance ) {

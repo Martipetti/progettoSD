@@ -112,6 +112,13 @@ public class ControllerSistema {
 	public Transazione postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) {
 		return new Transazione(from, to, amount);
 	}
+	
+	@RequestMapping(method=RequestMethod.POST, value = "/api/divert")
+	public ResponseEntity<?> postDivert(@RequestParam String ide) {
+		
+		ProgettoBancaApplication.database.deleteTransation( ide );
+		return ResponseEntity.ok("Transazione annullata");
+	}
 
 	//metodo per la costruzione della pagina html
 	public String manageHtml(String name) throws URISyntaxException, IOException {

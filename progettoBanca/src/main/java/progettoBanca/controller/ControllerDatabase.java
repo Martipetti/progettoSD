@@ -52,6 +52,8 @@ public class ControllerDatabase {
 					"SURNAME VARCHAR(255) NOT NULL,"+
 					"CF VARCHAR(16) NOT NULL," +
 					"BALANCE INT NOT NULL," + 
+					"TRANSAZIONE TEXT NOT NULL," +
+					"FOREIGN KEY (TRANSAZIONE) REFERENCES transation ( ID1 )," +
 					"PRIMARY KEY (ID, CF));";
 			
 			stmt = c.createStatement(); 
@@ -125,6 +127,7 @@ public class ControllerDatabase {
 	}
 	
 	public void creatAccount(String id, String name, String surname, String cf, double balance) throws ClassNotFoundException, SQLException {
+		
 		String query = "SELECT CF FROM account";
 		String cf1= "";
 		boolean b = true;
@@ -142,8 +145,8 @@ public class ControllerDatabase {
 	        }
 	        	
     		if( b == true ) {
-	    		query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE ) VALUES ( '" 
-	    				+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "');";
+	    		query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE, TRANSAZIONE ) VALUES ( '" 
+	    				+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "', (SELECT IDE FROM transation JOIN account ON transation.ID1 = account.ID);";
  				stmt.executeUpdate(query);
     		}
 	        
@@ -163,6 +166,7 @@ public class ControllerDatabase {
 		List<Account> account = new ArrayList<Account>();
 		String query = "SELECT * FROM account";
 		String id, name, surname, cf;
+		List transazioni;
 		double balance;
 		
 		try {
@@ -177,7 +181,7 @@ public class ControllerDatabase {
 			    surname = rs.getString( "SURNAME" );
 			    cf = rs.getString( "CF" );
 			    balance = rs.getDouble( "BALANCE" );
-			    
+			    transazioni = rs.getArray("TRANSAZIONE");
 			    account.add( new Account( id, name, surname, cf, balance, null ) );
 				
 			}
@@ -196,8 +200,9 @@ public class ControllerDatabase {
 		return account;
 	}
 	
-	public List<Object> getAccountTransation(String id) throws SQLException{
+	public List<Object> getAccountTransation( String id ) throws SQLException{
 		
+		Account a;
 		List<Object> info = new ArrayList<Object>();
 		String query1 = "SELECT * FROM account WHERE ID = '" + id +"' ";
 		String query2 = "SELECT IDE FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
@@ -210,23 +215,25 @@ public class ControllerDatabase {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(query1);
 			
-			while (rs.next()) {
+			
 			id = rs.getString( "ID" );
 		    name = rs.getString( "NAME" );
 		    surname = rs.getString( "SURNAME" );
 		    cf = rs.getString( "CF" );
 		    balance = rs.getDouble( "BALANCE" );
 		    
-		    info.add( new Account( id, name, surname, cf, balance, null ) );
-			}
+		    a = new Account( id, name, surname, cf, balance, null );
+		    info.add( a );
+			
 		    
 			rs = stmt.executeQuery(query2);
 			
 			while (rs.next()) {
 			    ide = rs.getString( "IDE" );
 			    
-			    info.add(new Transazione( ide ));
-				
+			 a.getTransazioni().add(new Transazione ( ide ));
+
+			 
 			}
 			
 			
@@ -254,6 +261,49 @@ public class ControllerDatabase {
 			stmt = c.createStatement();
 			stmt.executeUpdate (query);
 			c.commit ();
+	      	stmt.close();
+	      	c.close();
+	      	
+		} catch ( Exception e ) {
+		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      System.exit(0);
+		}
+		
+		System.out.println( "Operation done successfully" );
+
+	}
+	
+	public void deleteTransation ( String ide ) {
+		
+		String query = "SELECT ID1, ID2, AMOUNT, DATA FROM transation WHERE IDE = '" + ide +"' ";
+		String idS, idR;
+		double amount = 0.0;
+		Date data;
+		double balanceR = 0.0;
+		try {
+			
+			openDatabase();
+			
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+	        
+	        while (rs.next()) {
+		    idS = rs.getString( "ID1" );
+		    idR = rs.getString( "ID2" );
+		    amount = rs.getDouble( "AMOUNT" );
+		    data= rs.getDate( "DATA" );
+		    
+		    balanceR = getBalance( idR );
+		    if(balanceR < amount ) {
+	        	
+	        	System.err.println ("Il saldo del conto del ricevente non è sufficente per annulare l'operazione");
+			    System.exit (0);
+			    
+	        }
+		    createTransation(ide, data, -amount, idR, idS);
+	        }
+	        
+			rs.close();
 	      	stmt.close();
 	      	c.close();
 	      	
