@@ -28,7 +28,7 @@
 
         <div style="background-color: rgb(218, 235, 250);">
             <nav class="nav" style="padding-bottom: 25px; padding-top: 25px; font-size: large;">
-                <a class="nav-link active" aria-current="page" href="Index.html">Home</a>
+                <a class="nav-link active" aria-current="page" href="http://localhost:8080/">Home</a>
                 <a class="nav-link" aria-current="page" href="Transfer.html">Trasferimenti</a>
             </nav>
         </div>
@@ -43,20 +43,30 @@
             </div>
         </div>
 
-        <table class="table">
+        <table class="table" style="margin-top: 20px; margin-left: 5px; margin-right: 5px;">
             <thead>
-              <tr>
+              <tr style="color: #007bff;">
                 <th scope="col">Nome</th>
                 <th scope="col">Cognome</th>
-                <th scope="col">CodiceFiscale</th>
+                <th scope="col">Codice Fiscale</th>
               </tr>
             </thead>
             <tbody id="userInfo">
             </tbody>
-          </table>
+        </table>
 
-        <div id="tipo">
-        </div>
+        <table class="table" style="margin-top: 20px; margin-left: 5px; margin-right: 5px;">
+            <thead>
+              <tr style="color: #007bff;">
+                <th scope="col">Numero Transazione</th>
+                <th scope="col">Id Destinatario</th>
+                <th scope="col">Ammontare</th>
+               </tr>
+            </thead>
+            <tbody id="userInfo">
+            </tbody>
+        </table>
+       
 
         <script>
             var id = "";
@@ -83,7 +93,7 @@
             function setData(data) {
                 // var newdata = JSON.stringify(data);
                 var json = JSON.parse(data);
-                var str = json[0].name+data[1]+data[2]+data[3]; 
+                var str = "<tr><td>"+ json[0].name + "</td><td>" + json[0].surname + "</td><td>" + json[0].cf + "</td></tr>";
                 // str =  "<tr><td>"+ data.name + "</td><td>" + data.surname + "</td><td>" + data.cf + "</td></tr>" ;
                 // for(var i=0; i<data.length; i++) {      
                 //     str += "<p>"+data[i].name+"</p>"
