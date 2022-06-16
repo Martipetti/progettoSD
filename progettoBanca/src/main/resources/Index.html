@@ -43,6 +43,18 @@
             </div>
         </div>
 
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Cognome</th>
+                <th scope="col">CodiceFiscale</th>
+              </tr>
+            </thead>
+            <tbody id="userInfo">
+            </tbody>
+          </table>
+
         <div id="tipo">
         </div>
 
@@ -69,12 +81,16 @@
             });
 
             function setData(data) {
-                $("#tipo").html("ciao");
-                var str = data;
+                // var newdata = JSON.stringify(data);
+                var json = JSON.parse(data);
+                var str = json[0].name+data[1]+data[2]+data[3]; 
+                // str =  "<tr><td>"+ data.name + "</td><td>" + data.surname + "</td><td>" + data.cf + "</td></tr>" ;
                 // for(var i=0; i<data.length; i++) {      
                 //     str += "<p>"+data[i].name+"</p>"
                 // }    
-                $("#tipo").html(str);
+                $("#userInfo").html(str); 
+                // var str = data;
+                // $("#tipo").html(data);
 		    }
 
             function getId(){
