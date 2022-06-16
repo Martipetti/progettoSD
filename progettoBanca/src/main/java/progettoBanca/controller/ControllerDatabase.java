@@ -300,6 +300,7 @@ public class ControllerDatabase {
 			    System.exit (0);
 			    
 	        }
+		    ide= UUID.randomUUID().toString();
 		    createTransation(ide, data, -amount, idR, idS);
 	        }
 	        
