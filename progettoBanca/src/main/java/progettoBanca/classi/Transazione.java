@@ -15,6 +15,7 @@ public class Transazione {
 	private String from;
 	private String to;
 	private double amount; 
+	private double balanceS, balanceR;
 
 	public Transazione(String sender, String receiver, double amount) {
 		//super();
@@ -23,6 +24,8 @@ public class Transazione {
 		this.from = sender;
 		this.to = receiver;
 		this.amount = amount;
+		this.balanceS = ProgettoBancaApplication.database.getBalance( from );
+		this.balanceR = ProgettoBancaApplication.database.getBalance( to );
 		ProgettoBancaApplication.database.createTransation(ide, data, amount, from, to);
 	}
 	
@@ -56,5 +59,15 @@ public class Transazione {
 	public Date getData() {
 		return data;
 	}
+
+	public double getBalanceS() {
+		return ProgettoBancaApplication.database.getBalance( from );
+	}
+
+	public double getBalanceR() {
+		return ProgettoBancaApplication.database.getBalance( to );
+	}
+	
+	
 	
 }
