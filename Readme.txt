@@ -1,5 +1,5 @@
 Endpoint:
-- /api/account : sembra funzionare tutto
+- /api/account : sembra funzionare tutto (non è mai detto) 
 - /api/account/{accountId} : 
         GET funziona, 
         POST funziona ma permette di andare sotto zero, 
