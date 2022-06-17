@@ -76,7 +76,7 @@ public class ControllerDatabase {
 			
 			String transation = "CREATE TABLE IF NOT EXISTS transation ( " +
 					"IDE TEXT PRIMARY KEY NOT NULL, " +
-					"DATA DATE NOT NULL," +
+					"DATA TEXT NOT NULL," +
 					"AMOUNT DOUBLE NOT NULL," +
 					"ID1 TEXT NOT NULL, " +
 					"CF1 VARCHAR(16) NOT NULL," +
@@ -272,9 +272,8 @@ public class ControllerDatabase {
 	public void deleteTransation ( String ide ) {
 		
 		String query = "SELECT ID1, ID2, AMOUNT, DATA FROM transation WHERE IDE = '" + ide +"' ";
-		String idS, idR;
+		String idS, idR, data;
 		double amount = 0.0;
-		Date data;
 		double balanceR = 0.0;
 		try {
 			
@@ -287,7 +286,7 @@ public class ControllerDatabase {
 		    idS = rs.getString( "ID1" );
 		    idR = rs.getString( "ID2" );
 		    amount = rs.getDouble( "AMOUNT" );
-		    data= rs.getDate( "DATA" );
+		    data= rs.getString( "DATA" );
 		    
 		    balanceR = getBalance( idR );
 		    if(balanceR < amount ) {
@@ -296,13 +295,17 @@ public class ControllerDatabase {
 			    System.exit (0);
 			    
 	        }
+		    
 		    ide= UUID.randomUUID().toString();
-		    createTransation(ide, data, -amount, idR, idS);
-	        }
-	        
-			rs.close();
+		    rs.close();
 	      	stmt.close();
 	      	c.close();
+	      	
+		    createTransation(ide, data, amount, idR, idS);
+	        }
+	        
+		
+	      	
 	      	
 		} catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -341,10 +344,10 @@ public class ControllerDatabase {
 		
 	}
 	
-	public void createTransation(String ide, Date data, double amount, String from, String to) {
+	public  void createTransation(String ide, String data, double amount, String from, String to) {
 		
 		double balanceS = getBalance(from);
-		if(balanceS < amount || amount <= 0) {
+		if( balanceS < amount ) {
         	
         	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
 		    System.exit (0);
@@ -352,6 +355,7 @@ public class ControllerDatabase {
         }
 		
 		updateBalance(amount, to);
+		System.out.println( "ciao");
 		updateBalance(-amount, from);
 		
 		String cfS = getCf( from );
@@ -365,11 +369,12 @@ public class ControllerDatabase {
 		
 		try {
 			
+			
 			openDatabase();
 			
 			stmt = c.createStatement();
 			stmt.executeUpdate (query);
-			c.commit ();
+			c.commit();
 	      	stmt.close();
 	      	c.close();
 	      	
@@ -425,6 +430,7 @@ public class ControllerDatabase {
 		    rs.close();
 	      	stmt.close();
 	      	c.close();
+	      	System.out.println("close2 database successfully");
 			    
 		} catch ( Exception e ) {
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -461,7 +467,7 @@ public class ControllerDatabase {
 		return response;
 	}
 	
-	private void openDatabase() throws ClassNotFoundException, SQLException {
+	private  void openDatabase() throws ClassNotFoundException, SQLException {
 	   Class.forName("org.sqlite.JDBC");
        c = DriverManager.getConnection("jdbc:sqlite:database.db");
        c.setAutoCommit(false);
@@ -470,11 +476,13 @@ public class ControllerDatabase {
    
 	private void updateBalance( double amount, String id) {
 	   
+	
 	   double balance = getBalance(id);
+	   
 	   try {
 		      openDatabase();
 
-		      stmt = c.createStatement ();
+		      stmt = c.createStatement();
 		      if( amount < 0 ) {
 		    	  
 			        if(balance < amount) {
@@ -486,6 +494,7 @@ public class ControllerDatabase {
 			        else {
 			        	String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
 					    stmt.executeUpdate ( query );
+					    
 			        }
 			        
 		      }
@@ -493,12 +502,14 @@ public class ControllerDatabase {
 		      
 		      String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
 		      stmt.executeUpdate ( query );
+		     
 		      
 		      }
-		      
-		      c.commit ();
-		      stmt.close ();
-		      c.close ();
+		     
+		      c.commit();
+		      stmt.close();
+		      c.close();  
+		      System.out.println("close database successfully");
 		      
 	    } catch (Exception e) {
 		      System.err.println (e.getClass().getName() + ":" + e.getMessage());

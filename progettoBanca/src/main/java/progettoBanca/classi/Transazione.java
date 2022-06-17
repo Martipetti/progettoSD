@@ -1,5 +1,8 @@
 package progettoBanca.classi;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -19,14 +22,16 @@ public class Transazione {
 
 	public Transazione(String sender, String receiver, double amount) {
 		//super();
-		data = new Date(); 
+		data = Calendar.getInstance().getTime();  
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
+        String strDate = dateFormat.format(data);  
 		this.ide = UUID.randomUUID().toString();
 		this.from = sender;
 		this.to = receiver;
 		this.amount = amount;
 		this.balanceS = ProgettoBancaApplication.database.getBalance( from );
 		this.balanceR = ProgettoBancaApplication.database.getBalance( to );
-		ProgettoBancaApplication.database.createTransation(ide, data, amount, from, to);
+		ProgettoBancaApplication.database.createTransation(ide, strDate, amount, from, to);
 	}
 	
 	public Transazione( String ide, String sender, String receiver, double amount ) {
@@ -34,6 +39,7 @@ public class Transazione {
 		this.from = sender;
 		this.to = receiver;
 		this.amount = amount;
+
 	}
 
 	public String getFrom() {
