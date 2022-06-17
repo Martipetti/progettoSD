@@ -318,6 +318,14 @@ public class ControllerDatabase {
 	
 	public void createFlow(double amount, String ide, String idAccount) {
 		
+		double balance = getBalance( idAccount );
+		if(balance < amount) {
+        	
+        	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
+		    System.exit (0);
+		    
+        }
+		
 		String cf = getCf( idAccount );
 		updateBalance(amount, idAccount);
 		String query = "INSERT INTO flow ( IDE, ID, CF, AMOUNT ) VALUES ( '" 
