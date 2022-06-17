@@ -355,7 +355,6 @@ public class ControllerDatabase {
         }
 		
 		updateBalance(amount, to);
-		System.out.println( "ciao");
 		updateBalance(-amount, from);
 		
 		String cfS = getCf( from );
