@@ -102,8 +102,11 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method=RequestMethod.PATCH, value = "/api/account/{ID}")
-	public ResponseEntity<?> patchAccount(@PathVariable String ID, @RequestParam String name) throws ClassNotFoundException, SQLException {
+	public ResponseEntity<?> patchAccount(@PathVariable String ID, @RequestParam(required = false) String name, @RequestParam(required = false) String surname) throws ClassNotFoundException, SQLException {
+		if(name != null)
 		ProgettoBancaApplication.database.updateValueAccount( "NAME", name, ID);
+		else
+		ProgettoBancaApplication.database.updateValueAccount( "SURNAME", surname, ID);
 		return ResponseEntity.ok("resource update");
 	}
 	
