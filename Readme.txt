@@ -9,7 +9,7 @@ Endpoint:
 - /api/transfer
         POST da bad request (solo a martino) da controllare
 - /api/divert
-        POST non va  (database lock) 
+        POST non va  (database lock) --> implementare controllo su identificatore flow 
 
 HTML:
 - Index : sistemare ciclo sulle transazioni
