@@ -10,3 +10,7 @@ Endpoint:
         POST da bad request
 - /api/divert
         POST non va
+
+HTML:
+- Index : sistemare ciclo sulle transazioni
+- Tranfert : fare logica della pagina
