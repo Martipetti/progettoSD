@@ -4,7 +4,7 @@ Endpoint:
         GET funziona, bisogna far stamapare oltre alle transazioni anche i prelievi e versamenti 
         POST funziona 
         PUT funziona, 
-        PATCH funziona solo con nome, (aggiungere cognome) 
+        PATCH funziona 
         HEAD funziona
 - /api/transfer
         POST da bad request (solo a martino) da controllare
