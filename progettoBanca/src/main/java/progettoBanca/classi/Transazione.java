@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import progettoBanca.ProgettoBancaApplication;
 
@@ -42,11 +43,12 @@ public class Transazione {
 
 	}
 
+	@JsonView(Views.Internal.class)
 	public String getFrom() {
 		return from;
 	}
 	
-
+	@JsonView(Views.Internal.class)
 	public String getTo() {
 		return to;
 	}
@@ -56,7 +58,7 @@ public class Transazione {
 		return amount;
 	}
 
-
+	@JsonView(Views.Public.class)
 	public String getIde() {
 		return ide;
 	}
@@ -65,14 +67,21 @@ public class Transazione {
 	public Date getData() {
 		return data;
 	}
-
+	
+	@JsonView(Views.Internal.class)
 	public double getBalanceS() {
 		return ProgettoBancaApplication.database.getBalance( from );
 	}
 
+	@JsonView(Views.Internal.class)
 	public double getBalanceR() {
 		return ProgettoBancaApplication.database.getBalance( to );
 	}
+	
+	public class Views {
+		   public class Public {}
+		   public class Internal extends Public {}
+		}
 	
 	
 	

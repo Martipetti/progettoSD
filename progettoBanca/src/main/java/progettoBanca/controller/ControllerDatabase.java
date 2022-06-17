@@ -10,10 +10,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.json.JSONObject;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonObject;
+
 import progettoBanca.NotFoundException;
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
 import progettoBanca.classi.Transazione;
+import progettoBanca.classi.Transazione.Views;
+
+
 
 public class ControllerDatabase {
 	
@@ -203,6 +211,10 @@ public class ControllerDatabase {
 		String query2 = "SELECT * FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
 		String ide, name, surname, cf, sender, receiver;
 		double balance, amount;
+		JSONObject json;
+		ObjectMapper objectMapper = new ObjectMapper();
+		Object jsonObject;
+		JsonObject value;
 		
 		try {
 			openDatabase();
@@ -229,7 +241,15 @@ public class ControllerDatabase {
 			    receiver = rs.getString( "ID2" );
 			    amount = rs.getDouble( "AMOUNT" );
 			    
-			    info.add(new Transazione ( ide, sender, receiver, amount )); //costruttore : String ide, String sender, String receiver, double amount
+//			    json = objectMapper.writerWithView(Views.Public.class).writeValueAsString(new Transazione ( ide, sender, receiver, amount ));
+//			    jsonObject = json.getJson();
+//			    value = new createObjectBuilder().add("ide", ide).build();
+//			    info.add( jsonObject.toString() );
+//			    info.add(new Transazione ( ide, sender, receiver, amount )); //costruttore : String ide, String sender, String receiver, double amount
+			    json = new JSONObject().put("ide", ide);
+			    System.out.println(json);
+			    System.out.println(json.toString());
+			    info.add(json);
 
 			}
 				
