@@ -1,6 +1,7 @@
 package progettoBanca.classi;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -12,11 +13,9 @@ public class Transazione {
 	private String ide;
 	private Date data;
 	private String from;
-	private double SaldoSender;
 	private String to;
-	private double amount; // da inserire
-	private double SaldoReiver;
-	
+	private double amount; 
+
 	public Transazione(String sender, String receiver, double amount) {
 		//super();
 		data = new Date(); 
@@ -24,8 +23,6 @@ public class Transazione {
 		this.from = sender;
 		this.to = receiver;
 		this.amount = amount;
-		this.SaldoSender = ProgettoBancaApplication.database.getBalance( from );
-		this.SaldoReiver = ProgettoBancaApplication.database.getBalance( to );
 		ProgettoBancaApplication.database.createTransation(ide, data, amount, from, to);
 	}
 	
@@ -36,24 +33,21 @@ public class Transazione {
 		this.amount = amount;
 	}
 
-	public String getIdSender() {
+	public String getFrom() {
 		return from;
 	}
 	
-	public double getBilancioS() {
-		SaldoSender = ProgettoBancaApplication.database.getBalance( from );
-		return SaldoSender;
-	}
-	
-	public String getIdReceiver() {
+
+	public String getTo() {
 		return to;
 	}
 	
-	public double getBilancioR() {
-		SaldoReiver = ProgettoBancaApplication.database.getBalance( to );
-		return SaldoReiver;
+	@JsonIgnore
+	public double getAmount() {
+		return amount;
 	}
-	
+
+
 	public String getIde() {
 		return ide;
 	}

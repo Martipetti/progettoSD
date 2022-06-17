@@ -77,6 +77,7 @@ public class ControllerDatabase {
 			String transation = "CREATE TABLE IF NOT EXISTS transation ( " +
 					"IDE TEXT PRIMARY KEY NOT NULL, " +
 					"DATA DATE NOT NULL," +
+					"AMOUNT DOUBLE NOT NULL," +
 					"ID1 TEXT NOT NULL, " +
 					"CF1 VARCHAR(16) NOT NULL," +
 					"ID2 TEXT NOT NULL, " +
@@ -143,8 +144,8 @@ public class ControllerDatabase {
 	        }
 	        	
     		if( b == true ) {
-	    		query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE, TRANSAZIONE ) VALUES ( '" 
-	    				+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "', (SELECT IDE FROM transation JOIN account ON transation.ID1 = account.ID);";
+	    		query = "INSERT INTO account ( ID, NAME, SURNAME, CF, BALANCE ) VALUES ( '" 
+	    				+ id + "', '" + name + "', '" + surname + "', '" + cf + "', '" + balance + "');";
  				stmt.executeUpdate(query);
     		}
 	        
@@ -201,8 +202,7 @@ public class ControllerDatabase {
 		String query1 = "SELECT * FROM account WHERE ID = '" + id +"' ";
 		String query2 = "SELECT * FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
 		String ide, name, surname, cf, sender, receiver;
-		double balance;
-		Date data;
+		double balance, amount;
 		
 		try {
 			openDatabase();
@@ -210,7 +210,7 @@ public class ControllerDatabase {
 			stmt = c.createStatement();
 			ResultSet rs = stmt.executeQuery(query1);
 			
-			
+			while (rs.next()) {
 			id = rs.getString( "ID" );
 		    name = rs.getString( "NAME" );
 		    surname = rs.getString( "SURNAME" );
@@ -219,6 +219,7 @@ public class ControllerDatabase {
 		    
 		    a = new Account( id, name, surname, cf, balance );
 		    info.add( a );
+			}
 			
 			rs = stmt.executeQuery(query2);
 			
@@ -226,8 +227,9 @@ public class ControllerDatabase {
 			    ide = rs.getString( "IDE" );
 			    sender = rs.getString( "ID1" );
 			    receiver = rs.getString( "ID2" );
+			    amount = rs.getDouble( "AMOUNT" );
 			    
-			    info.add(new Transazione ( ide, sender, receiver, 0.0 )); //costruttore : String ide, String sender, String receiver, double amount
+			    info.add(new Transazione ( ide, sender, receiver, amount )); //costruttore : String ide, String sender, String receiver, double amount
 
 			}
 				
@@ -341,8 +343,8 @@ public class ControllerDatabase {
 	
 	public void createTransation(String ide, Date data, double amount, String from, String to) {
 		
-		double balance = getBalance(from);
-		if(balance < amount || amount <= 0) {
+		double balanceS = getBalance(from);
+		if(balanceS < amount || amount <= 0) {
         	
         	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
 		    System.exit (0);
@@ -354,8 +356,8 @@ public class ControllerDatabase {
 		
 		String cfS = getCf( from );
 		String cfR = getCf( to );
-		String query = "INSERT INTO transation ( IDE, DATA, ID1, CF1, ID2, CF2 ) VALUES ( '" 
-				+ ide + "', '" + data + "', '" + from + "', '" + cfS + "', '" + to + "', '" + cfR + "');";
+		String query = "INSERT INTO transation ( IDE, DATA, AMOUNT, ID1, CF1, ID2, CF2 ) VALUES ( '" 
+				+ ide + "', '" + data + "', '" + amount + "', '" + from + "', '" + cfS + "', '" + to + "', '" + cfR + "');";
 		
 		if( cfS == null || cfR == null) {
 			throw new NotFoundException();

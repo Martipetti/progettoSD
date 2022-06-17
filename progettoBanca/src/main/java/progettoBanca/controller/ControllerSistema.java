@@ -118,6 +118,7 @@ public class ControllerSistema {
 	//end-point : /api/transfer
 	@RequestMapping(method=RequestMethod.POST, value = "/api/transfer")
 	public Transazione postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) {
+		
 		return new Transazione(from, to, amount);
 	}
 	
