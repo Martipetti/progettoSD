@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Random;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import progettoBanca.ProgettoBancaApplication;
+import progettoBanca.classi.Transazione.Views;
 
 public class Account {
 	
@@ -57,26 +59,28 @@ public class Account {
 		id = hexadecimal.substring(0, 20);
 		return id;
 	}
-
+    
+	@JsonView(Views.Public.class)
 	public String getName() {
 		return name;
 	}
 
-
+	@JsonView(Views.Public.class)
 	public String getSurname() {
 		return surname;
 	}
 
-
+	@JsonView(Views.Internal.class)
 	public String getId() {
 		return id;
 	}
 	
-	
+	@JsonView(Views.Public.class)
 	public double getBalance() {
 		return balance;
 	}
 
+	@JsonView(Views.Public.class)
     public String getCf() {
 		return cf;
 	}

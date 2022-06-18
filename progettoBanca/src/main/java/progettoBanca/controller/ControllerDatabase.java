@@ -211,10 +211,6 @@ public class ControllerDatabase {
 		String query2 = "SELECT * FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
 		String ide, name, surname, cf, sender, receiver;
 		double balance, amount;
-		JSONObject json;
-		ObjectMapper objectMapper = new ObjectMapper();
-		Object jsonObject;
-		JsonObject value;
 		
 		try {
 			openDatabase();
@@ -241,15 +237,8 @@ public class ControllerDatabase {
 			    receiver = rs.getString( "ID2" );
 			    amount = rs.getDouble( "AMOUNT" );
 			    
-//			    json = objectMapper.writerWithView(Views.Public.class).writeValueAsString(new Transazione ( ide, sender, receiver, amount ));
-//			    jsonObject = json.getJson();
-//			    value = new createObjectBuilder().add("ide", ide).build();
-//			    info.add( jsonObject.toString() );
-//			    info.add(new Transazione ( ide, sender, receiver, amount )); //costruttore : String ide, String sender, String receiver, double amount
-			    json = new JSONObject().put("ide", ide);
-			    System.out.println(json);
-			    System.out.println(json.toString());
-			    info.add(json);
+		     Transazione t= new Transazione ( ide, sender, receiver, amount ); //costruttore : String ide, String sender, String receiver, double amount
+			 info.add(t);
 
 			}
 				

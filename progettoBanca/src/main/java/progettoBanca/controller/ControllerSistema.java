@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import progettoBanca.NotFoundException;
@@ -80,15 +81,13 @@ public class ControllerSistema {
 	}
 	
 	//end-point : /api/account/{ID}
-	
+	@JsonView(Views.Public.class)
 	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
 	public ResponseEntity<List<Object>> getAccount(@PathVariable String ID) throws SQLException {
 		
 //		ObjectMapper objectMapper = new ObjectMapper();
 		HttpHeaders headers = new HttpHeaders();
-		String jsonString;
-		
-	    headers.set( "X-Sistema-Bancario", ProgettoBancaApplication.database.getNomeCognom(ID) );
+		headers.set( "X-Sistema-Bancario", ProgettoBancaApplication.database.getNomeCognom(ID) );
 	    List<Object> list = ProgettoBancaApplication.database.getAccountTransation( ID );
 //	    jsonString = objectMapper.writerWithView(Views.Public.class).writeValueAsString(list);
 	    return ResponseEntity.ok().headers(headers).body(list);
@@ -126,6 +125,7 @@ public class ControllerSistema {
 	}
 	
 	//end-point : /api/transfer
+	@JsonView(Views.Internal.class)
 	@RequestMapping(method=RequestMethod.POST, value = "/api/transfer")
 	public Transazione postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) {
 		
