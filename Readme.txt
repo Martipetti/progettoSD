@@ -7,7 +7,7 @@ Endpoint:
         PATCH funziona 
         HEAD funziona
 - /api/transfer
-        POST funziona (no comment per lo spazio della from) 
+        POST 
 - /api/divert
         POST non va  (database lock) --> implementare controllo su identificatore flow 
 
