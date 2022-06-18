@@ -56,7 +56,7 @@
                     id2 = $("#id2").val();
                     number = $("#import").val();
 
-                    if(id1.length == 20 & id2.length == 20 & !isNaN(number) & number !== ""){
+                    if(id1.length == 20 & id2.length == 20 & !isNaN(number) & number !== "" & number >= 0){
                         $("#id1").removeClass("is-invalid");
                         $("#id2").removeClass("is-invalid");
                         $("#import").removeClass("is-invalid"); 
@@ -77,7 +77,7 @@
                         if(id2.length != 20){
                             $("#id2").addClass("is-invalid");
                         }
-                        if(isNaN(number) || number === ""){
+                        if(isNaN(number) || number === "" || number <= 0){
                             $("#import").addClass("is-invalid");
                         }
                     }
