@@ -235,8 +235,8 @@ public class ControllerDatabase {
 			    receiver = rs.getString( "ID2" );
 			    amount = rs.getDouble( "AMOUNT" );
 			    
-		     Transazione t= new Transazione ( ide, sender, receiver, amount ); //costruttore : String ide, String sender, String receiver, double amount
-			 info.add(t);
+			    Transazione t= new Transazione ( ide, sender, receiver, amount ); //costruttore : String ide, String sender, String receiver, double amount
+			    info.add(t);
 
 			}
 			
@@ -247,8 +247,8 @@ public class ControllerDatabase {
 			    cf = rs.getString( "CF" );
 			    amount = rs.getDouble( "AMOUNT" );
 			    
-		     Flow f= new Flow( amount, ide, id ); 
-			 info.add(f);
+			    Flow f= new Flow( amount, ide, id ); 
+			    info.add(f);
 
 			}
 				

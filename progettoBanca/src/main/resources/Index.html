@@ -63,8 +63,8 @@
             <thead>
               <tr style="color: #007bff;">
                 <th scope="col">Numero Transazione</th>
-                <th scope="col">Id Destinatario</th>
-                <th scope="col">Ammontare</th>
+                <th scope="col">Id Transazione</th>
+                <th scope="col">Tipologia</th>
                </tr>
             </thead>
             <tbody id="transationInfo">
@@ -111,8 +111,25 @@
                     var json = JSON.parse(data);
                     var str = "<tr><td>"+ json[0].name + "</td><td>" + json[0].surname + "</td><td>" + json[0].cf + "</td><td>" + json[0].balance + "</td></tr>";
                     var transation = "";
+
+                    for (var key in json) {
+                        if (json.hasOwnProperty(key)) {
+                            if( key == 0 ){
+                                var str = "<tr><td>"+ json[0].name + "</td><td>" + json[0].surname + "</td><td>" + json[0].cf + "</td><td>" + json[0].balance + "</td></tr>";
+                            }
+                            if ( json[key].ideTransazione != null & key == 1){
+                                transation += "<tr><td><b>" + key + "</b></td><td><b>" + json[key].ideTransazione + "</b></td><td><b>" + "Transazione" + "</b></td></tr>"; 
+                            }
+                            if ( json[key].ideTransazione != null){
+                                transation += "<tr><td>" + key + "</td><td>" + json[key].ideTransazione + "</td><td>" + "Transazione" + "</td></tr>"; 
+                            }
+                            if (json[key].idePV != null) {
+                                transation += "<tr><td>" + key + "</td><td>" + json[key].idePV + "</td><td>" + "Prelievo/Deposito" + "</td></tr>";
+                            }
+                        }
+                    } 
                     //for(var i=1; i<=json.length; i++) {      
-                        transation += "<tr><td>" + 1 + "</td><td>" + json[1].idReceiver + "</td><td>" + "double" + "</td></tr>"; 
+                        // transation += "<tr><td>" + 1 + "</td><td>" + json[1].idReceiver + "</td><td>" + "double" + "</td></tr>"; 
                    // }    
                     $("#userInfo").html( str ); 
                     $("#transationInfo").html( transation ); 

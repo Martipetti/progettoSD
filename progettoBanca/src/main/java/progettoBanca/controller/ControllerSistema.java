@@ -81,6 +81,7 @@ public class ControllerSistema {
 	}
 	
 	//end-point : /api/account/{ID}
+	
 	@JsonView(Views.Public.class)
 	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
 	public ResponseEntity<List<Object>> getAccount(@PathVariable String ID) throws SQLException {
