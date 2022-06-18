@@ -32,7 +32,7 @@
         <div style="background-color: rgb(218, 235, 250);">
             <nav class="nav" style="padding-bottom: 25px; padding-top: 25px; font-size: large;">
                 <a class="nav-link active" aria-current="page" href="http://localhost:8080/">Home</a>
-                <a class="nav-link" aria-current="page" href="Transfer.html">Trasferimenti</a>
+                <a class="nav-link" aria-current="page" href="http://localhost:8080/transfer">Trasferimenti</a>
             </nav>
         </div>
 
@@ -83,7 +83,7 @@
                     id = $("#input").val();
                     console.log(id);
                     if(id.length == 20) {
-                        // validator.element( "#input" );
+                        $("#input").removeClass("is-invalid");
                         urlStr = "http://localhost:8080/api/account/" + id;
                         console.log(urlStr);
                         $.ajax({
@@ -107,7 +107,6 @@
             });
 
             function setData(data) {
-                    // var newdata = JSON.stringify(data);
                     var json = JSON.parse(data);
                     var str = "<tr><td>"+ json[0].name + "</td><td>" + json[0].surname + "</td><td>" + json[0].cf + "</td><td>" + json[0].balance + "</td></tr>";
                     var transation = "";
@@ -128,35 +127,12 @@
                             }
                         }
                     } 
-                    //for(var i=1; i<=json.length; i++) {      
-                        // transation += "<tr><td>" + 1 + "</td><td>" + json[1].idReceiver + "</td><td>" + "double" + "</td></tr>"; 
-                   // }    
+                   
                     $("#userInfo").html( str ); 
                     $("#transationInfo").html( transation ); 
                     // var str = data;
                     // $("#tipo").html(data);
 		    };
-
-
-            // $( "#form" ).validate({
-            //     rules: {
-            //         field: {
-            //             required: true
-            //         }
-            //     }
-            // });
-            // var validator = $( "#form" ).validate({
-            //     rules: {
-            //         field: {
-            //             required: true
-            //         }
-            //     },
-            //     messages: {
-            //         field1: "Please specify your name"
-            //     }
-            // });
-
-
             
         </script>
 

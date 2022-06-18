@@ -126,9 +126,11 @@ public class ControllerSistema {
 	//end-point : /api/transfer
 	@JsonView(Views.Internal.class)
 	@RequestMapping(method=RequestMethod.POST, value = "/api/transfer")
-	public Transazione postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) {
+	public ResponseEntity<Transazione> postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) {
 		
-		return new Transazione(from, to, amount);
+	    Transazione t = new Transazione(from, to, amount);
+	    return ResponseEntity.ok().body(t);
+		
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/divert")
