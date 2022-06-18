@@ -85,11 +85,9 @@ public class ControllerSistema {
 	@RequestMapping(method=RequestMethod.GET, value = "/api/account/{ID}")
 	public ResponseEntity<List<Object>> getAccount(@PathVariable String ID) throws SQLException {
 		
-//		ObjectMapper objectMapper = new ObjectMapper();
 		HttpHeaders headers = new HttpHeaders();
 		headers.set( "X-Sistema-Bancario", ProgettoBancaApplication.database.getNomeCognom(ID) );
 	    List<Object> list = ProgettoBancaApplication.database.getAccountTransation( ID );
-//	    jsonString = objectMapper.writerWithView(Views.Public.class).writeValueAsString(list);
 	    return ResponseEntity.ok().headers(headers).body(list);
 				
 	}

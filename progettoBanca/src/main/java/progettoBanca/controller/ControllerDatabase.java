@@ -6,14 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.json.JSONObject;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 
 import progettoBanca.NotFoundException;
 import progettoBanca.ProgettoBancaApplication;
@@ -318,18 +314,16 @@ public class ControllerDatabase {
 			    System.exit (0);
 			    
 	        }
-		    
+	
 		    ide= UUID.randomUUID().toString();
+		    createTransation(ide, data, amount, idR, idS);
+		    
 		    rs.close();
 	      	stmt.close();
 	      	c.close();
-	      	
-		    createTransation(ide, data, amount, idR, idS);
 	        }
 	        
-		
-	      	
-	      	
+		  	
 		} catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
@@ -460,7 +454,6 @@ public class ControllerDatabase {
 		    rs.close();
 	      	stmt.close();
 	      	c.close();
-	      	System.out.println("close2 database successfully");
 			    
 		} catch ( Exception e ) {
 	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -505,7 +498,6 @@ public class ControllerDatabase {
 	}
    
 	private void updateBalance( double amount, String id) {
-	   
 	
 	   double balance = getBalance(id);
 	   
