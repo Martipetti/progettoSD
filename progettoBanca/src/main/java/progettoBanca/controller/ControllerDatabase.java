@@ -18,6 +18,7 @@ import com.google.gson.JsonObject;
 import progettoBanca.NotFoundException;
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
+import progettoBanca.classi.Flow;
 import progettoBanca.classi.Transazione;
 import progettoBanca.classi.Transazione.Views;
 
@@ -209,6 +210,7 @@ public class ControllerDatabase {
 		List<Object> info = new ArrayList<Object>();
 		String query1 = "SELECT * FROM account WHERE ID = '" + id +"' ";
 		String query2 = "SELECT * FROM transation WHERE ID1 = '" + id +"' ORDER BY DATA ASC";
+		String query3 = "SELECT * FROM flow WHERE ID = '" + id +"' ";
 		String ide, name, surname, cf, sender, receiver;
 		double balance, amount;
 		
@@ -239,6 +241,18 @@ public class ControllerDatabase {
 			    
 		     Transazione t= new Transazione ( ide, sender, receiver, amount ); //costruttore : String ide, String sender, String receiver, double amount
 			 info.add(t);
+
+			}
+			
+			rs = stmt.executeQuery(query3);
+			while (rs.next()) {
+			    ide = rs.getString( "IDE" );
+			    id = rs.getString( "ID" );
+			    cf = rs.getString( "CF" );
+			    amount = rs.getDouble( "AMOUNT" );
+			    
+		     Flow f= new Flow( amount, ide, id ); 
+			 info.add(f);
 
 			}
 				

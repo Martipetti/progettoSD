@@ -14,7 +14,7 @@ import progettoBanca.ProgettoBancaApplication;
 
 public class Transazione {
 	
-	private String ide;
+	private String ideTransazione;
 	private Date data;
 	private String from;
 	private String to;
@@ -26,17 +26,17 @@ public class Transazione {
 		data = Calendar.getInstance().getTime();  
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  
         String strDate = dateFormat.format(data);  
-		this.ide = UUID.randomUUID().toString();
+		this.ideTransazione = UUID.randomUUID().toString();
 		this.from = sender;
 		this.to = receiver;
 		this.amount = amount;
 		this.balanceS = ProgettoBancaApplication.database.getBalance( from );
 		this.balanceR = ProgettoBancaApplication.database.getBalance( to );
-		ProgettoBancaApplication.database.createTransation(ide, strDate, amount, from, to);
+		ProgettoBancaApplication.database.createTransation(ideTransazione, strDate, amount, from, to);
 	}
 	
 	public Transazione( String ide, String sender, String receiver, double amount ) {
-		this.ide = ide;
+		this.ideTransazione = ide;
 		this.from = sender;
 		this.to = receiver;
 		this.amount = amount;
@@ -59,8 +59,8 @@ public class Transazione {
 	}
 
 	@JsonView(Views.Public.class)
-	public String getIde() {
-		return ide;
+	public String getIdeTransazione() {
+		return ideTransazione;
 	}
     
 	@JsonIgnore

@@ -3,32 +3,34 @@ package progettoBanca.classi;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import progettoBanca.ProgettoBancaApplication;
+import progettoBanca.classi.Transazione.Views;
 import progettoBanca.controller.ControllerDatabase;
 
 public class Flow {
 	
 	private double amount;
-	private String ide;
+	private String idePV;
 	private String idAccount;
 	private double bilancio;
 	
 	public Flow(double amount, String ide, String idAccount) {
 		super();
 		this.amount = amount;
-		this.ide = ide;
+		this.idePV = ide;
 		this.idAccount = idAccount;
 		
 	}
 	
 
 	public Flow(double amount, String idAccount) {
-		this.ide = UUID.randomUUID().toString();
+		this.idePV = UUID.randomUUID().toString();
 		this.idAccount = idAccount;
 		this.amount = amount;
 		this.bilancio = ProgettoBancaApplication.database.getBalance(idAccount);
-		ProgettoBancaApplication.database.createFlow(amount, ide, idAccount);
+		ProgettoBancaApplication.database.createFlow(amount, idePV, idAccount);
 		
 	}
 	
@@ -36,9 +38,10 @@ public class Flow {
 	public double getAmount() {
 		return amount;
 	}
-
-	public String getIde() {
-		return ide;
+    
+	@JsonView(Views.Public.class)
+	public String getIdePV() {
+		return idePV;
 	}
 
 	@JsonIgnore
@@ -46,6 +49,7 @@ public class Flow {
 		return idAccount;
 	}
 	
+	@JsonView(Views.Internal.class)
 	public double getBilancio() {
 		bilancio = ProgettoBancaApplication.database.getBalance(idAccount);
 		return bilancio;
