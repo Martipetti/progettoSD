@@ -325,8 +325,9 @@ public class ControllerDatabase {
 	
 	public void deleteTransation ( String ide ) {
 		
+		String query1= "SELECT IDE FROM flow ";
 		String query = "SELECT ID1, ID2, AMOUNT, DATA FROM transation WHERE IDE = '" + ide +"' ";
-		String idS, idR, data;
+		String idS, idR, data, ide2;
 		double amount = 0.0;
 		double balanceR = 0.0;
 		try {
@@ -334,9 +335,24 @@ public class ControllerDatabase {
 			openDatabase();
 			
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
+			ResultSet rs = stmt.executeQuery(query1);
+			
+
 	        
 	        while (rs.next()) {
+		    ide2 = rs.getString( "IDE" );
+		    
+		    if(ide2.equals(ide)) {
+	        	
+	        	System.err.println ("Stai cercando di annullare un prelievo");
+			    System.exit (0);
+			    
+	        }
+	        }
+	        
+		    rs = stmt.executeQuery(query);
+	        
+		    while (rs.next()) {
 		    idS = rs.getString( "ID1" );
 		    idR = rs.getString( "ID2" );
 		    amount = rs.getDouble( "AMOUNT" );
@@ -407,7 +423,7 @@ public class ControllerDatabase {
 	public  void createTransation(String ide, String data, double amount, String from, String to) {
 		
 		double balanceS = getBalance(from);
-		if( balanceS < amount ) {
+		if( balanceS < amount || amount < 0 ) {
         	
         	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
 		    System.exit (0);
