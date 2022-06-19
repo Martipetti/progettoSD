@@ -52,7 +52,7 @@ public class Transazione {
 		return to;
 	}
 	
-	@JsonIgnore
+	@JsonView(Views.Internal.class) 
 	public double getAmount() {
 		return amount;
 	}
