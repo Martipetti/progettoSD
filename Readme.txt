@@ -8,6 +8,7 @@ Endpoint:
         HEAD funziona
 - /api/transfer
         POST funziona
+        GET funziona
 - /api/divert
         POST non va  (database lock) --> implementare controllo su identificatore flow 
 
