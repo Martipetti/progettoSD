@@ -15,3 +15,4 @@ Endpoint:
 HTML:
 - Index : sistemare ciclo sulle transazioni
 - Tranfert : fare logica della pagina
+- Registrazione: da fare
