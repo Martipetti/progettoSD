@@ -133,14 +133,6 @@ public class ControllerSistema {
 		
 	}
 	
-	@JsonView(Views.Internal.class)
-	@RequestMapping(method=RequestMethod.GET, value = "/api/transfer/{ide}")
-	public ResponseEntity<Transazione> getTransfer(@PathVariable String ide) throws SQLException {
-		
-	    Transazione t = ProgettoBancaApplication.database.getTransazione( ide );
-	    return ResponseEntity.ok().body(t);
-		
-	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/divert")
 	public ResponseEntity<?> postDivert(@RequestParam String ide) {

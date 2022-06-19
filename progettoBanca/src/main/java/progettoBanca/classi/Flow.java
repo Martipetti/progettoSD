@@ -11,8 +11,8 @@ import progettoBanca.controller.ControllerDatabase;
 
 public class Flow {
 	
-	private double amount;
 	private String idePV;
+	private double amount;
 	private String idAccount;
 	private double bilancio;
 	
@@ -34,7 +34,7 @@ public class Flow {
 		
 	}
 	
-	@JsonIgnore
+	@JsonView(Views.Public.class)
 	public double getAmount() {
 		return amount;
 	}

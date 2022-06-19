@@ -200,40 +200,6 @@ public class ControllerDatabase {
 		return account;
 	}
 	
-	public Transazione getTransazione( String ide ) throws SQLException{
-		
-		Transazione t = null;
-		String query = "SELECT ID1, ID2, AMOUNT FROM transation WHERE IDE = '" + ide +"'";
-		String sender, receiver;
-		double amount;
-		
-		try {
-			openDatabase();
-			
-			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
-			
-			while (rs.next()) {
-			    sender = rs.getString( "ID1" );
-			    receiver = rs.getString( "ID2" );
-			    amount = rs.getDouble( "AMOUNT" );
-			    
-			    t= new Transazione ( ide, sender, receiver, amount );
-				
-			}
-			
-			rs.close();
-	      	stmt.close();
-	      	c.close();
-	      	
-		} catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
-		}
-		
-		
-		return t;
-	}
 	
 	public List<Object> getAccountTransation( String id ) throws SQLException{
 		
