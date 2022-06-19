@@ -133,7 +133,6 @@ public class ControllerSistema {
 		
 	}
 	
-	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/divert")
 	public ResponseEntity<?> postDivert(@RequestParam String ide) {
 		
