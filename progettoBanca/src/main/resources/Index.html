@@ -65,6 +65,7 @@
                 <th scope="col">Numero Transazione</th>
                 <th scope="col">Id Transazione</th>
                 <th scope="col">Tipologia</th>
+                <th scope="col">Ammontare</th>
                </tr>
             </thead>
             <tbody id="transationInfo">
@@ -84,7 +85,7 @@
                     console.log(id);
                     if(id.length == 20) {
                         $("#input").removeClass("is-invalid");
-                        urlStr = "http://localhost:8080/api/account/" + id;
+                        urlStr = "http://localhost:8080/api/transazione/" + id;
                         console.log(urlStr);
                         $.ajax({
                             type: "GET",        
@@ -117,13 +118,13 @@
                                 var str = "<tr><td>"+ json[0].name + "</td><td>" + json[0].surname + "</td><td>" + json[0].cf + "</td><td>" + json[0].balance + "</td></tr>";
                             }
                             if ( json[key].ideTransazione != null & key == 1){
-                                transation += "<tr><td><b>" + key + "</b></td><td><b>" + json[key].ideTransazione + "</b></td><td><b>" + "Transazione" + "</b></td></tr>"; 
+                                transation += "<tr><td><b>" + key + "</b></td><td><b>" + json[key].ideTransazione + "</b></td><td><b>" + "Transazione" + "</b></td><td><b>" + json[key].amount + "</b></td></tr>"; 
                             }
                             if ( json[key].ideTransazione != null){
-                                transation += "<tr><td>" + key + "</td><td>" + json[key].ideTransazione + "</td><td>" + "Transazione" + "</td></tr>"; 
+                                transation += "<tr><td>" + key + "</td><td>" + json[key].ideTransazione + "</td><td>" + "Transazione" + "</td><td>" + json[key].amount + "</td></tr>"; 
                             }
                             if (json[key].idePV != null) {
-                                transation += "<tr><td>" + key + "</td><td>" + json[key].idePV + "</td><td>" + "Prelievo/Deposito" + "</td></tr>";
+                                transation += "<tr><td>" + key + "</td><td>" + json[key].idePV + "</td><td>" + "Prelievo/Deposito" + "</td><td>" + json[key].amount + "</td></tr>";
                             }
                         }
                     } 

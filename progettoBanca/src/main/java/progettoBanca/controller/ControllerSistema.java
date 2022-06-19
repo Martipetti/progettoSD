@@ -124,9 +124,10 @@ public class ControllerSistema {
 	}
 	
 	//end-point : /api/transfer
+	
 	@JsonView(Views.Internal.class)
 	@RequestMapping(method=RequestMethod.POST, value = "/api/transfer")
-	public ResponseEntity<Transazione> postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) {
+	public ResponseEntity<Transazione> postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) throws ClassNotFoundException, SQLException {
 		
 	    Transazione t = new Transazione(from, to, amount);
 	    return ResponseEntity.ok().body(t);
@@ -143,9 +144,9 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/divert")
-	public ResponseEntity<?> postDivert(@RequestParam String ide) {
+	public ResponseEntity<?> postDivert(@RequestParam String id) {
 		
-		ProgettoBancaApplication.database.deleteTransation( ide );
+		ProgettoBancaApplication.database.deleteTransation( id );
 		return ResponseEntity.ok("Transazione annullata");
 	}
 

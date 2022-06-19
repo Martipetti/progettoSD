@@ -73,12 +73,18 @@
                     } else {
                         if(id1.length != 20){
                             $("#id1").addClass("is-invalid");
+                        } else {
+                            $("#id1").removeClass("is-invalid");
                         }
                         if(id2.length != 20){
                             $("#id2").addClass("is-invalid");
+                        } else {
+                            $("#id2").removeClass("is-invalid");
                         }
                         if(isNaN(number) || number === "" || number <= 0){
                             $("#import").addClass("is-invalid");
+                        }else{
+                            $("#import").removeClass("is-invalid"); 
                         }
                     }
                 });

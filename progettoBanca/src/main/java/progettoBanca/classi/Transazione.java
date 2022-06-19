@@ -1,5 +1,6 @@
 package progettoBanca.classi;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +21,7 @@ public class Transazione {
 	private double amount; 
 	private double balanceS, balanceR;
 
-	public Transazione(String sender, String receiver, double amount) {
+	public Transazione(String sender, String receiver, double amount) throws ClassNotFoundException, SQLException {
 		//super();
 		data = Calendar.getInstance().getTime();  
 		DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");  

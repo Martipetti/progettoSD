@@ -23,7 +23,7 @@ import progettoBanca.classi.Transazione.Views;
 public class ControllerDatabase {
 	
 	public Connection c = null;
-	public static Statement stmt = null;
+	public Statement stmt = null;
 	
 	//metodo per la creazione del database
 	public void createDatabase() throws ClassNotFoundException{
@@ -306,39 +306,40 @@ public class ControllerDatabase {
 
 	        
 	        while (rs.next()) {
-		    ide2 = rs.getString( "IDE" );
+	        	ide2 = rs.getString( "IDE" );
 		    
-		    if(ide2.equals(ide)) {
+	        	if(ide2.equals(ide)) {
 	        	
-	        	System.err.println ("Stai cercando di annullare un prelievo");
-			    System.exit (0);
+	        		System.err.println ("Stai cercando di annullare un prelievo");
+	        		System.exit (0);
 			    
-	        }
+	        	}
 	        }
 	        
 		    rs = stmt.executeQuery(query);
 	        
-		    while (rs.next()) {
-		    idS = rs.getString( "ID1" );
-		    idR = rs.getString( "ID2" );
-		    amount = rs.getDouble( "AMOUNT" );
-		    data= rs.getString( "DATA" );
+//		    while (rs.next()) {
+		    	idS = rs.getString( "ID1" );
+		    	idR = rs.getString( "ID2" );
+		    	amount = rs.getDouble( "AMOUNT" );
+		    	data= rs.getString( "DATA" );
 		    
-		    balanceR = getBalance( idR );
-		    if(balanceR < amount ) {
+		    	balanceR = getBalance( idR );
+		    	if(balanceR < amount ) {
 	        	
-	        	System.err.println ("Il saldo del conto del ricevente non è sufficente per annulare l'operazione");
-			    System.exit (0);
+		    		System.err.println ("Il saldo del conto del ricevente non è sufficente per annulare l'operazione");
+		    		System.exit (0);
 			    
-	        }
-	
-		    ide= UUID.randomUUID().toString();
-		    createTransation(ide, data, amount, idR, idS);
+		    	}
+//		    }
+		    	
+		    	ide= UUID.randomUUID().toString();
+		    	createTransation(ide, data, amount, idR, idS);
 		    
-		    rs.close();
-	      	stmt.close();
-	      	c.close();
-	        }
+		    	rs.close();
+		    	stmt.close();
+		    	c.close();
+//	        
 	        
 		  	
 		} catch ( Exception e ) {
@@ -386,7 +387,7 @@ public class ControllerDatabase {
 		
 	}
 	
-	public  void createTransation(String ide, String data, double amount, String from, String to) {
+	public  void createTransation(String ide, String data, double amount, String from, String to) throws ClassNotFoundException, SQLException {
 		
 		double balanceS = getBalance(from);
 		if( balanceS < amount || amount < 0 ) {
@@ -395,9 +396,13 @@ public class ControllerDatabase {
 		    System.exit (0);
 		    
         }
+//		openDatabase();
 		
+//		System.out.println("-2");
 		updateBalance(amount, to);
+//		System.out.println("-1");
 		updateBalance(-amount, from);
+//		System.out.println("0");
 		
 		String cfS = getCf( from );
 		String cfR = getCf( to );
@@ -413,11 +418,17 @@ public class ControllerDatabase {
 			
 			openDatabase();
 			
+//			System.out.println("1");
 			stmt = c.createStatement();
-			stmt.executeUpdate (query);
+//			System.out.println("2");
+			stmt.executeUpdate(query);
+//			System.out.println("3");
 			c.commit();
+//			System.out.println("4");
 	      	stmt.close();
+//	      	System.out.println("5");
 	      	c.close();
+//	      	System.out.println("6");
 	      	
 		} catch ( Exception e ) {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
@@ -529,20 +540,17 @@ public class ControllerDatabase {
 			        	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
 					    System.exit (0);
 					    
-			        }
-			        else {
+			        }else {
 			        	String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
 					    stmt.executeUpdate ( query );
 					    
 			        }
 			        
-		      }
-		      else {
+		      }else {
 		      
-		      String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
-		      stmt.executeUpdate ( query );
-		     
-		      
+			      String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
+			      stmt.executeUpdate ( query );
+		       
 		      }
 		     
 		      c.commit();
