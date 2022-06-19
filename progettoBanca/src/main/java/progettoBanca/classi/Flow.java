@@ -34,7 +34,7 @@ public class Flow {
 		
 	}
 	
-	@JsonView(Views.Public.class)
+	@JsonView(Views.Internal.class)
 	public double getAmount() {
 		return amount;
 	}
