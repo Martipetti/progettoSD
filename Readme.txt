@@ -10,13 +10,17 @@ Endpoint:
         POST funziona
         GET funziona
 - /api/divert
-        POST non va  (database lock) --> implementare controllo su identificatore flow 
-        DA CAMBIARE ORDINE COSE -> fare metodo che da info e chiamare create transaction
+       POST funziona
 
 HTML:
-- Index : sistemare ciclo sulle transazioni
-- Tranfert : fare logica della pagina
+- Index : finito
+- Tranfert : finiti
 ( - Registrazione: da fare )
 
 Database:
-- inserire metodi aggiornamento (cascade/restrict)
+- inserire metodi aggiornamento (cascade/restrict) <- PRIORITARIO!!
+
+Generale:
+- fare test generali
+- fare test con valori non ammessi
+- fare readme
