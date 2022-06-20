@@ -87,8 +87,8 @@ public class ControllerDatabase {
 					"CF1 VARCHAR(16) NOT NULL," +
 					"ID2 TEXT NOT NULL, " +
 					"CF2 VARCHAR(16) NOT NULL," +
-					"FOREIGN KEY (ID1, CF1) REFERENCES account(ID, CF)," +
-					"FOREIGN KEY (ID2, CF2) REFERENCES account(ID, CF) );";
+					"FOREIGN KEY (ID1, CF1) REFERENCES account(ID, CF) ON DELETE CASCADE," +
+					"FOREIGN KEY (ID2, CF2) REFERENCES account(ID, CF) ON DELETE CASCADE);";
 			
 			stmt = c.createStatement(); 
 			stmt.executeUpdate(transation);
@@ -115,7 +115,7 @@ public class ControllerDatabase {
 					"ID TEXT NOT NULL, " +
 					"CF VARCHAR(16) NOT NULL," +
 					"AMOUNT DOUBLE NOT NULL," +
-					"FOREIGN KEY (ID, CF) REFERENCES account(ID, CF));" ;
+					"FOREIGN KEY (ID, CF) REFERENCES account(ID, CF) ON DELETE CASCADE);" ;
 			
 			stmt = c.createStatement(); 
 			stmt.executeUpdate(flow);
@@ -423,7 +423,7 @@ public class ControllerDatabase {
 	public void createFlow(double amount, String ide, String idAccount) {
 		
 		double balance = getBalance( idAccount );
-		if(balance < amount) {
+		if(balance < amount && amount < 0) {
         	
         	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
 		    System.exit (0);

@@ -64,19 +64,19 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/api/account")
-	public String makeAccount(@RequestBody String bodyString) throws SQLException, ClassNotFoundException {
+	public ResponseEntity<String> makeAccount(@RequestBody String bodyString) throws SQLException, ClassNotFoundException {
 		
 		Map<String, String> body = parseBody(bodyString);
 		Account a = new Account(body.get("name"), body.get("surname"), body.get("cf"));	
-		return a.getId();
+		return ResponseEntity.ok().body(a.getId()); 
 		
 	}
 	
 	@RequestMapping(method=RequestMethod.DELETE, value = "/api/account")
-	public String removeAccount(@RequestParam(value = "id") String id) {
+	public ResponseEntity<String> removeAccount(@RequestParam(value = "id") String id) {
 
 	    ProgettoBancaApplication.database.deleteAccount( id );	
-		return "OK";
+	    return ResponseEntity.ok().body("Account cancellato"); 
 	
 	}
 	
@@ -94,10 +94,10 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/account/{ID}")
-	public Flow getFlow(@PathVariable String ID, @RequestBody String bodyString) {
+	public ResponseEntity<Flow> getFlow(@PathVariable String ID, @RequestBody String bodyString) {
 		Map<String, String> body = parseBody(bodyString);
 		Flow f = new Flow( Double.parseDouble(body.get("amount")), ID);
-		return f;
+		 return ResponseEntity.ok().body(f);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT, value = "/api/account/{ID}" )
