@@ -291,27 +291,29 @@ public class ControllerDatabase {
 	
 	public boolean deleteTransation ( String ide ) {
 		
-		String query1= "SELECT IDE FROM flow ";
-		String query = "SELECT ID1, ID2, AMOUNT, DATA FROM transation WHERE IDE = '" + ide +"' ";
-		String idS, idR, data, ide2;
-		double amount = 0.0;
-		double balanceR = 0.0;
+//		String query1= "SELECT IDE FROM flow ";
+//		String query = "SELECT ID1, ID2, AMOUNT, DATA FROM transation WHERE IDE = '" + ide +"' ";
+//		String idS, idR, data, ide2;
+//		double amount = 0.0;
+//		double balanceR = 0.0;
 		
 		Object[] infoTransation = findInfoTransation(ide);
 		
-		if(infoTransation == null) {
+		if( infoTransation == null ) {
 			return false;
 		}
-		System.out.println((String) infoTransation[1]);
-		System.out.println((String)infoTransation[0]);
-		System.out.println((double)infoTransation[2]);
 		
 		try {
+			
 			new Transazione((String) infoTransation[1], (String)infoTransation[0], (double)infoTransation[2]);
+			
 		} catch (ClassNotFoundException | SQLException e) {
+			
 			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		    System.exit(0);
+		    
 		}
+		
 		return true;
 		
 //		try {
@@ -370,20 +372,34 @@ public class ControllerDatabase {
 	}
 	
 	private Object[] findInfoTransation(String id)  {
+		
+		String queryCheck = "SELECT IDE FROM transation";
+		boolean check = true;
 		String query = "SELECT * FROM transation WHERE IDE = '" + id +"';";
 		String idS, idR;
 		double amount;
 		Object[] info = new Object[3];
 		
 		try {
+			
 			openDatabase();
 			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(query);
 			
-			if(rs.toString() == "" || rs == null) {
+			ResultSet rs = stmt.executeQuery(queryCheck);
+			
+			while( rs.next() & check ) {
+				
+				if( id.equals(rs.getString( "IDE" )) ) {
+					check = false;
+				}
+				
+			}
+			
+			if(check) {		
 				return null;
 			}
 			
+			rs = stmt.executeQuery(query);
 			idS = rs.getString( "ID1" );
 	    	idR = rs.getString( "ID2" );
 	    	amount = rs.getDouble( "AMOUNT" );
@@ -396,9 +412,9 @@ public class ControllerDatabase {
 	    	stmt.close();
 	    	c.close();
 	    	
-		}catch( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-		      System.exit(0);
+		} catch( Exception e ) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			System.exit(0);
 		}
 		
 		return info;
@@ -440,22 +456,19 @@ public class ControllerDatabase {
 		
 	}
 	
-	public  void createTransation(String ide, String data, double amount, String from, String to) throws ClassNotFoundException, SQLException {
+	public  void createTransation(String ide, String data, double amount, String from, String to) throws ClassNotFoundException, SQLException {	
 		
 		double balanceS = getBalance(from);
+		
 		if( balanceS < amount || amount < 0 ) {
-        	
+			
         	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
 		    System.exit (0);
 		    
         }
-//		openDatabase();
 		
-//		System.out.println("-2");
 		updateBalance(amount, to);
-//		System.out.println("-1");
 		updateBalance(-amount, from);
-//		System.out.println("0");
 		
 		String cfS = getCf( from );
 		String cfR = getCf( to );
@@ -467,25 +480,20 @@ public class ControllerDatabase {
 		}
 		
 		try {
-			
-			
+				
 			openDatabase();
 			
-//			System.out.println("1");
 			stmt = c.createStatement();
-//			System.out.println("2");
 			stmt.executeUpdate(query);
-//			System.out.println("3");
 			c.commit();
-//			System.out.println("4");
 	      	stmt.close();
-//	      	System.out.println("5");
 	      	c.close();
-//	      	System.out.println("6");
 	      	
 		} catch ( Exception e ) {
+			
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
+		      
 		}
 		
 	}
