@@ -144,10 +144,13 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/divert")
-	public ResponseEntity<?> postDivert(@RequestParam String id) {
+	public ResponseEntity<String> postDivert(@RequestParam String id) {
 		
-		ProgettoBancaApplication.database.deleteTransation( id );
-		return ResponseEntity.ok("Transazione annullata");
+		if (ProgettoBancaApplication.database.deleteTransation( id )) {
+			return new ResponseEntity<String>("Transazione annullata", HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>("Failed", HttpStatus.OK);
+		}
 	}
 
 	//metodo per la costruzione della pagina html

@@ -289,66 +289,119 @@ public class ControllerDatabase {
 
 	}
 	
-	public void deleteTransation ( String ide ) {
+	public boolean deleteTransation ( String ide ) {
 		
 		String query1= "SELECT IDE FROM flow ";
 		String query = "SELECT ID1, ID2, AMOUNT, DATA FROM transation WHERE IDE = '" + ide +"' ";
 		String idS, idR, data, ide2;
 		double amount = 0.0;
 		double balanceR = 0.0;
+		
+		Object[] infoTransation = findInfoTransation(ide);
+		
+		if(infoTransation == null) {
+			return false;
+		}
+		System.out.println((String) infoTransation[1]);
+		System.out.println((String)infoTransation[0]);
+		System.out.println((double)infoTransation[2]);
+		
 		try {
-			
-			openDatabase();
-			
-			stmt = c.createStatement();
-			ResultSet rs = stmt.executeQuery(query1);
-			
-
-	        
-	        while (rs.next()) {
-	        	ide2 = rs.getString( "IDE" );
-		    
-	        	if(ide2.equals(ide)) {
-	        	
-	        		System.err.println ("Stai cercando di annullare un prelievo");
-	        		System.exit (0);
-			    
-	        	}
-	        }
-	        
-		    rs = stmt.executeQuery(query);
-	        
-//		    while (rs.next()) {
-		    	idS = rs.getString( "ID1" );
-		    	idR = rs.getString( "ID2" );
-		    	amount = rs.getDouble( "AMOUNT" );
-		    	data= rs.getString( "DATA" );
-		    
-		    	balanceR = getBalance( idR );
-		    	if(balanceR < amount ) {
-	        	
-		    		System.err.println ("Il saldo del conto del ricevente non è sufficente per annulare l'operazione");
-		    		System.exit (0);
-			    
-		    	}
-//		    }
-		    	
-		    	ide= UUID.randomUUID().toString();
-		    	createTransation(ide, data, amount, idR, idS);
-		    
-		    	rs.close();
-		    	stmt.close();
-		    	c.close();
+			new Transazione((String) infoTransation[1], (String)infoTransation[0], (double)infoTransation[2]);
+		} catch (ClassNotFoundException | SQLException e) {
+			System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		    System.exit(0);
+		}
+		return true;
+		
+//		try {
+//			
+//			openDatabase();
+//			
+//			stmt = c.createStatement();
+//			ResultSet rs = stmt.executeQuery(query1);
+//			
+//
 //	        
-	        
-		  	
-		} catch ( Exception e ) {
+//	        while (rs.next()) {
+//	        	ide2 = rs.getString( "IDE" );
+//		    
+//	        	if(ide2.equals(ide)) {
+//	        	
+//	        		System.err.println ("Stai cercando di annullare un prelievo");
+//	        		System.exit (0);
+//			    
+//	        	}
+//	        }
+//	        
+//		    rs = stmt.executeQuery(query);
+//	        
+////		    while (rs.next()) {
+//		    	idS = rs.getString( "ID1" );
+//		    	idR = rs.getString( "ID2" );
+//		    	amount = rs.getDouble( "AMOUNT" );
+//		    	data= rs.getString( "DATA" );
+//		    
+//		    	balanceR = getBalance( idR );
+//		    	if(balanceR < amount ) {
+//	        	
+//		    		System.err.println ("Il saldo del conto del ricevente non è sufficente per annulare l'operazione");
+//		    		System.exit (0);
+//			    
+//		    	}
+////		    }
+//		    	
+//		    	ide= UUID.randomUUID().toString();
+//		    	createTransation(ide, data, amount, idR, idS);
+//		    
+//		    	rs.close();
+//		    	stmt.close();
+//		    	c.close();
+////	        
+//	        
+//		  	
+//		} catch ( Exception e ) {
+//		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+//		      System.exit(0);
+//		}
+//		
+//		System.out.println( "Operation done successfully" );
+//		return true;
+	}
+	
+	private Object[] findInfoTransation(String id)  {
+		String query = "SELECT * FROM transation WHERE IDE = '" + id +"';";
+		String idS, idR;
+		double amount;
+		Object[] info = new Object[3];
+		
+		try {
+			openDatabase();
+			stmt = c.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			if(rs.toString() == "" || rs == null) {
+				return null;
+			}
+			
+			idS = rs.getString( "ID1" );
+	    	idR = rs.getString( "ID2" );
+	    	amount = rs.getDouble( "AMOUNT" );
+			
+	    	info[0] = idS;
+	    	info[1] = idR;
+	    	info[2] = amount;
+	    	
+	    	rs.close();
+	    	stmt.close();
+	    	c.close();
+	    	
+		}catch( Exception e ) {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
 		}
 		
-		System.out.println( "Operation done successfully" );
-
+		return info;
 	}
 	
 	public void createFlow(double amount, String ide, String idAccount) {
