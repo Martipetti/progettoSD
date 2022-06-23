@@ -2,7 +2,6 @@ package progettoBanca.controller;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -13,24 +12,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import progettoBanca.NotFoundException;
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
 import progettoBanca.classi.Flow;
@@ -169,6 +162,7 @@ public class ControllerSistema {
 	}
 
 	//metodo per la costruzione della pagina html
+	
 	public String manageHtml(String name) throws URISyntaxException, IOException {
 		URL res = getClass().getClassLoader().getResource(name);
 		File file = Paths.get(res.toURI()).toFile();
@@ -191,6 +185,7 @@ public class ControllerSistema {
 	}
 	
 	//metodo per il parsing del body delle richieste
+	
 	public Map<String, String> parseBody(String str) {
 		Map<String, String> body = new HashMap<>();
 		  String[] values = str.split("&");

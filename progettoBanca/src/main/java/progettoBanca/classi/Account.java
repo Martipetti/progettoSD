@@ -3,7 +3,6 @@ package progettoBanca.classi;
 import java.sql.SQLException;
 import java.util.Random;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 
 import progettoBanca.ProgettoBancaApplication;

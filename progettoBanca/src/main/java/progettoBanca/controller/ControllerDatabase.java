@@ -7,16 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-
-import org.json.JSONObject;
 
 import progettoBanca.NotFoundException;
-import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Account;
 import progettoBanca.classi.Flow;
 import progettoBanca.classi.Transazione;
-import progettoBanca.classi.Transazione.Views;
 
 
 

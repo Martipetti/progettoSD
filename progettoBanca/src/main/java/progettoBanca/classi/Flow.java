@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 import progettoBanca.ProgettoBancaApplication;
 import progettoBanca.classi.Transazione.Views;
-import progettoBanca.controller.ControllerDatabase;
 
 public class Flow {
 	
