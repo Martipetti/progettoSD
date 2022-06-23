@@ -94,8 +94,18 @@ public class ControllerSistema {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value = "/api/account/{ID}")
-	public ResponseEntity<Flow> getFlow(@PathVariable String ID, @RequestBody String bodyString) {
+	public ResponseEntity<?> getFlow(@PathVariable String ID, @RequestBody String bodyString) {
 		Map<String, String> body = parseBody(bodyString);
+		double balance = ProgettoBancaApplication.database.getBalance( ID );
+		if( Double.parseDouble(body.get("amount")) < 0 ) {
+			
+			if(balance < (-Double.parseDouble(body.get("amount")))) {
+        	
+				return ResponseEntity.ok().body("Il saldo del conto non è sufficente");
+			}
+		    
+        }
+		
 		Flow f = new Flow( Double.parseDouble(body.get("amount")), ID);
 		 return ResponseEntity.ok().body(f);
 	}
@@ -127,8 +137,13 @@ public class ControllerSistema {
 	
 	@JsonView(Views.Internal.class)
 	@RequestMapping(method=RequestMethod.POST, value = "/api/transfer")
-	public ResponseEntity<Transazione> postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) throws ClassNotFoundException, SQLException {
+	public ResponseEntity<?> postTransfer(@RequestParam String from, @RequestParam String to, @RequestParam double amount) throws ClassNotFoundException, SQLException {
+        double balanceS = ProgettoBancaApplication.database.getBalance(from);
 		
+		if( balanceS < amount || amount < 0 ) {
+		
+			return ResponseEntity.ok().body("Il saldo del conto non è sufficente o il valore inserito è negativo");
+        }
 	    Transazione t = new Transazione(from, to, amount);
 	    return ResponseEntity.ok().body(t);
 		

@@ -291,11 +291,6 @@ public class ControllerDatabase {
 	
 	public boolean deleteTransation ( String ide ) {
 		
-//		String query1= "SELECT IDE FROM flow ";
-//		String query = "SELECT ID1, ID2, AMOUNT, DATA FROM transation WHERE IDE = '" + ide +"' ";
-//		String idS, idR, data, ide2;
-//		double amount = 0.0;
-//		double balanceR = 0.0;
 		
 		Object[] infoTransation = findInfoTransation(ide);
 		
@@ -316,59 +311,6 @@ public class ControllerDatabase {
 		
 		return true;
 		
-//		try {
-//			
-//			openDatabase();
-//			
-//			stmt = c.createStatement();
-//			ResultSet rs = stmt.executeQuery(query1);
-//			
-//
-//	        
-//	        while (rs.next()) {
-//	        	ide2 = rs.getString( "IDE" );
-//		    
-//	        	if(ide2.equals(ide)) {
-//	        	
-//	        		System.err.println ("Stai cercando di annullare un prelievo");
-//	        		System.exit (0);
-//			    
-//	        	}
-//	        }
-//	        
-//		    rs = stmt.executeQuery(query);
-//	        
-////		    while (rs.next()) {
-//		    	idS = rs.getString( "ID1" );
-//		    	idR = rs.getString( "ID2" );
-//		    	amount = rs.getDouble( "AMOUNT" );
-//		    	data= rs.getString( "DATA" );
-//		    
-//		    	balanceR = getBalance( idR );
-//		    	if(balanceR < amount ) {
-//	        	
-//		    		System.err.println ("Il saldo del conto del ricevente non è sufficente per annulare l'operazione");
-//		    		System.exit (0);
-//			    
-//		    	}
-////		    }
-//		    	
-//		    	ide= UUID.randomUUID().toString();
-//		    	createTransation(ide, data, amount, idR, idS);
-//		    
-//		    	rs.close();
-//		    	stmt.close();
-//		    	c.close();
-////	        
-//	        
-//		  	
-//		} catch ( Exception e ) {
-//		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-//		      System.exit(0);
-//		}
-//		
-//		System.out.println( "Operation done successfully" );
-//		return true;
 	}
 	
 	private Object[] findInfoTransation(String id)  {
@@ -422,14 +364,6 @@ public class ControllerDatabase {
 	
 	public void createFlow(double amount, String ide, String idAccount) {
 		
-		double balance = getBalance( idAccount );
-		if(balance < amount && amount < 0) {
-        	
-        	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
-		    System.exit (0);
-		    
-        }
-		
 		String cf = getCf( idAccount );
 		updateBalance(amount, idAccount);
 		String query = "INSERT INTO flow ( IDE, ID, CF, AMOUNT ) VALUES ( '" 
@@ -457,15 +391,6 @@ public class ControllerDatabase {
 	}
 	
 	public  void createTransation(String ide, String data, double amount, String from, String to) throws ClassNotFoundException, SQLException {	
-		
-		double balanceS = getBalance(from);
-		
-		if( balanceS < amount || amount < 0 ) {
-			
-        	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
-		    System.exit (0);
-		    
-        }
 		
 		updateBalance(amount, to);
 		updateBalance(-amount, from);
@@ -588,7 +513,6 @@ public class ControllerDatabase {
    
 	private void updateBalance( double amount, String id) {
 	
-	   double balance = getBalance(id);
 	   
 	   try {
 		      openDatabase();
@@ -596,18 +520,12 @@ public class ControllerDatabase {
 		      stmt = c.createStatement();
 		      if( amount < 0 ) {
 		    	  
-			        if(balance < amount) {
-			        	
-			        	System.err.println ("Il saldo del conto non è sufficente per fare il prelievo");
-					    System.exit (0);
+			       String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
+				   stmt.executeUpdate ( query );
 					    
-			        }else {
-			        	String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
-					    stmt.executeUpdate ( query );
-					    
-			        }
+			   }
 			        
-		      }else {
+		      else {
 		      
 			      String query = "UPDATE account set BALANCE = BALANCE + '" + amount + "' WHERE ID = '" + id + "';";  
 			      stmt.executeUpdate ( query );
