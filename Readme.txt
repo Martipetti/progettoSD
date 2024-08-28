@@ -1,5 +1,5 @@
 
-# Project Title
+### Bank simulation system
 
 This project, developed for our Bachelor's thesis, simulates the functionality of a bank employee interface. It allows users to perform various banking operations, such as account management, transaction processing, and customer service tasks. The simulation aims to provide an intuitive and efficient interface for bank employees, enhancing their workflow and customer interaction.
 
